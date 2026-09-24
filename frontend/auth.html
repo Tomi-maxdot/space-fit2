@@ -11,10 +11,10 @@
 
 <!-- Tailwind CSS v3 with Plugins -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="../tailwind/Tailwind.config.js"></script>
+<script src="tailwind/Tailwind.config.js"></script>
 
 <!-- Custom Styles (extracted to styles.css) -->
-<link rel="stylesheet" href="../tailwind/homepage.css">
+<link rel="stylesheet" href="tailwind/homepage.css">
 
 <style>
   body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -426,6 +426,17 @@
     });
   }
 
+  function completeAuthentication() {
+    if (window.SpaceFitAuth) window.SpaceFitAuth.setRegistered(true);
+    var params = new URLSearchParams(window.location.search);
+    var pending = params.get('pendingAction') || '';
+    var returnUrl = params.get('returnUrl') || 'index.html';
+    if (pending.indexOf('favorite:') === 0 && window.SpaceFitFavorites) window.SpaceFitFavorites.toggle(pending.slice(9));
+    else if (pending.indexOf('cart:') === 0 && window.triggerAddToCart) window.triggerAddToCart(pending.slice(5));
+    else if (pending.indexOf('navigate:') === 0) returnUrl = pending.slice(9);
+    else if (pending.indexOf('shop-search:') === 0) returnUrl = 'shop.html?search=' + encodeURIComponent(pending.slice(12));
+    window.location.replace(returnUrl);
+  }
   /* ---------- Form submission ---------- */
 
   loginForm.addEventListener('submit', function (event) {
@@ -446,6 +457,7 @@
         setLoadingState(loginForm, false);
         if (result && result.ok) {
           showStatus('success', 'Signed in successfully. Redirecting…');
+          setTimeout(completeAuthentication, 650);
         } else {
           showStatus('error', "We couldn't sign you in with those details. Please check your email and password and try again.");
         }
@@ -474,6 +486,7 @@
         setLoadingState(signupForm, false);
         if (result && result.ok) {
           showStatus('success', 'Account created. Welcome to SpaceFit!');
+          setTimeout(completeAuthentication, 650);
         } else {
           showStatus('error', "We couldn't create your account. Please try again.");
         }

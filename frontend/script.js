@@ -32,7 +32,7 @@
     if (existing) existing.remove();
 
     var currentPath = returnUrl || window.location.pathname.split('/').pop() || 'index.html';
-    if (window.location.search) currentPath += window.location.search;
+    if (!returnUrl && window.location.search) currentPath += window.location.search;
 
     var overlay = document.createElement('div');
     overlay.id = 'spacefitRegisterModal';
@@ -47,8 +47,8 @@
       '<h2 class="text-xl sm:text-[22px] font-bold text-stone-900 leading-tight">Register to continue</h2>',
       '<p class="mt-2 text-sm text-stone-600 leading-relaxed">You have not registered yet. Create an account or sign in to save items, shop, sell and use the AI assistant.</p>',
       '<div class="mt-6 space-y-2.5">',
-      '  <a href="' + AUTH_PAGE + '?mode=register&returnUrl=' + encodeURIComponent(currentPath) + '" class="w-full py-3 px-4 rounded-lg bg-[#543A23] hover:bg-[#3d2919] text-white text-sm font-semibold text-center block transition-colors shadow-sm">Register</a>',
-      '  <a href="' + AUTH_PAGE + '?mode=login&returnUrl=' + encodeURIComponent(currentPath) + '" class="w-full py-2.5 px-4 rounded-lg border border-[#E7E3DC] hover:bg-stone-50 text-stone-800 text-sm font-semibold text-center block transition-colors">Sign in</a>',
+      '  <a href="' + AUTH_PAGE + '?mode=register&returnUrl=' + encodeURIComponent(currentPath) + (pendingAction ? '&pendingAction=' + encodeURIComponent(pendingAction) : '') + '" class="w-full py-3 px-4 rounded-lg bg-[#543A23] hover:bg-[#3d2919] text-white text-sm font-semibold text-center block transition-colors shadow-sm">Register</a>',
+      '  <a href="' + AUTH_PAGE + '?mode=login&returnUrl=' + encodeURIComponent(currentPath) + (pendingAction ? '&pendingAction=' + encodeURIComponent(pendingAction) : '') + '" class="w-full py-2.5 px-4 rounded-lg border border-[#E7E3DC] hover:bg-stone-50 text-stone-800 text-sm font-semibold text-center block transition-colors">Sign in</a>',
       '</div>'
     ].join('');
 
@@ -99,7 +99,7 @@
       location: 'Lagos',
       description: 'Natural solid oak with curved headboard and oatmeal bouclé upholstery.',
       specs: 'Solid wood frame, 200 × 160 × 90 cm, Modern, Easy assembly',
-      image: '../frontend/assets/featured%20product/lunabedframe.jpg',
+      image: 'assets/featured%20product/lunabedframe.jpg',
       fallbackImage: 'assets/featured%20product/lunabedframe.jpg'
     },
     {
@@ -113,7 +113,7 @@
       location: 'Abuja',
       description: 'Orthopedic dual-layer high density foam with breathable cooling gel.',
       specs: 'Memory foam & pocket spring, 180 × 200 × 28 cm, Zero motion transfer',
-      image: '../frontend/assets/featured%20product/cloud%20bedding.jpg',
+      image: 'assets/featured%20product/cloud%20bedding.jpg',
       fallbackImage: 'assets/featured%20product/cloud%20bedding.jpg'
     },
     {
@@ -127,7 +127,7 @@
       location: 'Ibadan',
       description: 'Ash wood finish with integrated hangers and soft-close German hinges.',
       specs: 'Blonde ash wood, 150 × 210 × 60 cm, Modular shelving',
-      image: '../frontend/assets/featured%20product/solid%20wardrobe.jpg',
+      image: 'assets/featured%20product/solid%20wardrobe.jpg',
       fallbackImage: 'assets/featured%20product/solid%20wardrobe.jpg'
     },
     {
@@ -141,7 +141,7 @@
       location: 'Lagos',
       description: 'Slender tapered legs with cable routing for clean, mindful workspaces.',
       specs: 'Sustainably sourced white oak, 120 × 60 × 75 cm, Beveled perimeter',
-      image: '../frontend/assets/featured%20product/novo%20workdesk.jpg',
+      image: 'assets/featured%20product/novo%20workdesk.jpg',
       fallbackImage: 'assets/featured%20product/novo%20workdesk.jpg'
     },
     {
@@ -156,7 +156,7 @@
       description: 'Low-profile Japanese solid ash bed frame with mortise and tenon joinery.',
       specs: 'Solid Japanese Ash, 215 × 195 × 85 cm, Japandi Minimalist',
       image: 'assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg',
-      fallbackImage: '../frontend/assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg'
+      fallbackImage: 'assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg'
     },
     {
       id: 'arlo-nightstand',
@@ -170,7 +170,7 @@
       description: 'Cantilevered floating American walnut nightstand with cable dock channel.',
       specs: 'American walnut & brass cleat, 45 × 32 × 25 cm, Wall mounted',
       image: 'assets/shop%20by%20category/nightstand.jpg',
-      fallbackImage: '../frontend/assets/shop%20by%20category/nightstand.jpg'
+      fallbackImage: 'assets/shop%20by%20category/nightstand.jpg'
     },
     {
       id: 'sahara-rug',
@@ -184,7 +184,7 @@
       description: 'Handwoven 100% natural mountain wool area rug with subtle Berber motifs.',
       specs: '100% Unbleached Mountain Wool, 240 × 300 cm, Non-shedding pile',
       image: 'assets/shop%20by%20category/rugs.jpg',
-      fallbackImage: '../frontend/assets/shop%20by%20category/rugs.jpg'
+      fallbackImage: 'assets/shop%20by%20category/rugs.jpg'
     },
     {
       id: 'vesper-lamp',
@@ -198,7 +198,7 @@
       description: 'Architectural floor lamp crafted from brushed solid brass with travertine base.',
       specs: 'Brushed brass & travertine stone, 145 × 28 × 28 cm, 2700K warm LED',
       image: 'assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg',
-      fallbackImage: '../frontend/assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg'
+      fallbackImage: 'assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg'
     }
   ];
 
@@ -282,6 +282,7 @@
   }
 
   function addToCart(itemOrTitle, qty) {
+    if (!isUserRegistered()) { showRegisterModal(null, 'cart:' + (typeof itemOrTitle === 'string' ? itemOrTitle : (itemOrTitle && (itemOrTitle.id || itemOrTitle.title)) || '')); return null; }
     var quantityToAdd = Number(qty) || 1;
     var cart = getCartItems();
     var itemObj = {};
@@ -432,11 +433,17 @@
     if (productCard) {
       var cardId = productCard.getAttribute('data-item-id') || productCard.dataset.itemId || productCard.getAttribute('data-product-id');
       if (cardId) return normalizeItemId(cardId);
+      var productLink = productCard.querySelector('a[href*="product-details"]');
+      if (productLink) { var productId = new URL(productLink.href, window.location.href).searchParams.get('id'); if (productId) return normalizeItemId(productId); }
       var titleEl = productCard.querySelector('h3, h2, .product-title, a[href*="product-details"]') || productCard.querySelector('a');
       var titleText = titleEl ? (titleEl.textContent || '').trim() : '';
       if (titleText) return normalizeItemId(titleText);
     }
 
+    if ((window.location.pathname.split('/').pop() || '') === 'product-details.html') {
+      var pageProductId = new URLSearchParams(window.location.search).get('id');
+      if (pageProductId) return normalizeItemId(pageProductId);
+    }
     var text = (button.closest('article') || button.parentElement || button).textContent || '';
     var fallback = text.replace(/\s+/g, ' ').trim();
     return fallback ? normalizeItemId(fallback) : '';
@@ -502,88 +509,42 @@
     options = options || {};
     var existing = document.getElementById('spacefitFavoritesToast');
     if (existing) existing.remove();
-
     var toast = document.createElement('div');
     toast.id = 'spacefitFavoritesToast';
-    toast.className = 'fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-[9999] rounded-lg border border-[#E7E3DC] bg-white px-4 py-3 shadow-md min-w-[280px] max-w-[90vw] flex items-center justify-between gap-3 text-stone-900';
-    toast.style.bottom = window.innerWidth < 768 ? '88px' : '24px';
-
-    var actionHtml = '';
-    if (options.showUndo && options.undoItemId) {
-      actionHtml = '<button type="button" id="undoFavBtn" class="text-[#543A23] hover:text-[#F38B00] font-bold text-xs underline focus:outline-none">Undo</button>';
-    } else {
-      actionHtml = '<a href="' + FAVORITES_PAGE + '" class="text-[#543A23] hover:text-[#F38B00] underline text-xs font-bold transition-colors">View favorites</a>';
-    }
-
-    toast.innerHTML = [
-      '<div class="flex items-center gap-2.5 min-w-0">',
-      '  <svg class="w-4 h-4 text-[#543A23] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>',
-      '  <span class="text-xs sm:text-sm font-semibold text-stone-900">' + message + '</span>',
-      '</div>',
-      '<div class="flex items-center gap-3 shrink-0">',
-      '  ' + actionHtml,
-      '  <button type="button" aria-label="Close" class="text-stone-400 hover:text-stone-700 text-lg leading-none p-1 focus:outline-none" id="closeFavToastBtn">×</button>',
-      '</div>'
-    ].join('');
-
+    toast.className = 'fixed bottom-6 left-1/2 -translate-x-1/2 z-[9999] rounded-lg border border-[#E7E3DC] bg-white px-4 py-3 shadow-md min-w-[280px] max-w-[90vw] flex items-center justify-between gap-3 text-stone-900';
+    var action = options.showUndo && options.undoItemId
+      ? '<button type="button" id="undoFavBtn" class="text-[#543A23] font-bold text-xs underline">Undo</button>'
+      : '<a href="' + FAVORITES_PAGE + '" class="text-[#543A23] underline text-xs font-bold">View favorites</a>';
+    toast.innerHTML = '<span class="text-sm font-semibold">' + message + '</span><span class="flex items-center gap-3">' + action + '<button type="button" aria-label="Close" id="closeFavToastBtn">×</button></span>';
     document.body.appendChild(toast);
-
-    if (options.showUndo && options.undoItemId) {
-      var undoBtn = toast.querySelector('#undoFavBtn');
-      if (undoBtn) {
-        undoBtn.addEventListener('click', function () {
-          toggleSavedItem(options.undoItemId, { notify: false });
-          showFavoriteToast('Added to favorites');
-          toast.remove();
-        });
-      }
-    }
-
-    var closeBtn = toast.querySelector('#closeFavToastBtn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function () {
-        toast.remove();
-      });
-    }
-
+    var undo = toast.querySelector('#undoFavBtn');
+    if (undo) undo.addEventListener('click', function () {
+      toggleSavedItem(options.undoItemId, { notify: false });
+      showFavoriteToast('Added to favorites');
+      toast.remove();
+    });
+    toast.querySelector('#closeFavToastBtn').addEventListener('click', function () { toast.remove(); });
     clearTimeout(window.spacefitFavoritesToastTimer);
-    window.spacefitFavoritesToastTimer = setTimeout(function () {
-      if (document.getElementById('spacefitFavoritesToast')) {
-        document.getElementById('spacefitFavoritesToast').remove();
-      }
-    }, 3000);
+    window.spacefitFavoritesToastTimer = setTimeout(function () { if (toast.isConnected) toast.remove(); }, 3000);
   }
 
   function toggleSavedItem(itemId, options) {
     options = options || {};
     var normalizedId = normalizeItemId(itemId);
     if (!normalizedId) return;
-
-    // Check registration first
     if (!isUserRegistered()) {
-      showRegisterModal();
+      showRegisterModal(null, 'favorite:' + normalizedId);
       return false;
     }
-
     var ids = getSavedItemIds();
     var isNowSaved = false;
     var index = ids.indexOf(normalizedId);
-
-    if (index === -1) {
-      ids.push(normalizedId);
-      isNowSaved = true;
-    } else {
-      ids.splice(index, 1);
-    }
-
+    if (index === -1) { ids.push(normalizedId); isNowSaved = true; }
+    else ids.splice(index, 1);
     setSavedItemIds(ids);
-
     if (options.notify !== false) {
-      if (isNowSaved) {
-        showFavoriteToast('Added to favorites');
-      } else {
-        showFavoriteToast('Removed from favorites', { showUndo: true, undoItemId: normalizedId });
-      }
+      if (isNowSaved) showFavoriteToast('Added to favorites');
+      else showFavoriteToast('Removed from favorites', { showUndo: true, undoItemId: normalizedId });
     }
     return isNowSaved;
   }
@@ -591,81 +552,9 @@
   window.toggleFavorite = function (button) {
     if (!button) return;
     var itemId = getItemId(button);
-    if (!itemId) return;
-    toggleSavedItem(itemId);
+    if (itemId) toggleSavedItem(itemId);
   };
-
-    var toast = document.createElement('div');
-    toast.id = 'spacefitFavoritesToast';
-    toast.className = 'fixed bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 rounded-lg border border-[#E7E3DC] bg-white px-4 py-3 shadow-md min-w-[280px] max-w-[90vw] flex items-center justify-between gap-3 text-stone-900';
-    toast.style.bottom = window.innerWidth < 768 ? '88px' : '24px';
-    toast.style.zIndex = '9999';
-
-    var linkHtml = '<a href="' + FAVORITES_PAGE + '" class="text-[#543A23] hover:text-[#F38B00] underline text-xs font-bold transition-colors">View favorites</a>';
-
-    toast.innerHTML = [
-      '<div class="flex items-center gap-2.5 min-w-0">',
-      '  <svg class="w-4 h-4 text-[#543A23] shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>',
-      '  <span class="text-xs sm:text-sm font-semibold text-stone-900">' + message + '</span>',
-      '</div>',
-      '<div class="flex items-center gap-3 shrink-0">',
-      '  ' + linkHtml,
-      '  <button type="button" aria-label="Close" class="text-stone-400 hover:text-stone-700 text-lg leading-none p-1 focus:outline-none" id="closeFavToastBtn">×</button>',
-      '</div>'
-    ].join('');
-
-    document.body.appendChild(toast);
-
-    var closeBtn = toast.querySelector('#closeFavToastBtn');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', function () {
-        toast.remove();
-      });
-    }
-
-    clearTimeout(window.spacefitFavoritesToastTimer);
-    window.spacefitFavoritesToastTimer = setTimeout(function () {
-      if (document.getElementById('spacefitFavoritesToast')) {
-        document.getElementById('spacefitFavoritesToast').remove();
-      }
-    }, 3000);
-  }
-
-  function toggleSavedItem(itemId, options) {
-    options = options || {};
-    var normalizedId = normalizeItemId(itemId);
-    if (!normalizedId) return;
-
-    var ids = getSavedItemIds();
-    var isNowSaved = false;
-    var index = ids.indexOf(normalizedId);
-
-    if (index === -1) {
-      ids.push(normalizedId);
-      isNowSaved = true;
-    } else {
-      ids.splice(index, 1);
-    }
-
-    setSavedItemIds(ids);
-
-    if (options.notify !== false) {
-      if (isNowSaved) {
-        showFavoriteToast('Added to favorites');
-      } else {
-        showFavoriteToast('Removed from favorites');
-      }
-    }
-    return isNowSaved;
-  }
-
-  window.toggleFavorite = function (button) {
-    if (!button) return;
-    var itemId = getItemId(button);
-    if (!itemId) return;
-    toggleSavedItem(itemId);
-  };
-
+  window.SpaceFitFavorites = { toggle: toggleSavedItem };
   /* ==========================================================================
      4. HOME PAGE SMART SEARCH BAR WITH DROPDOWN SUGGESTIONS & CLEAR BUTTON
      ========================================================================== */
@@ -783,6 +672,7 @@
 
     function executeSearch() {
       var query = searchInput.value.trim();
+      if (!isUserRegistered()) { showRegisterModal(null, 'shop-search:' + query); return; }
       if (query) {
         window.location.href = SHOP_PAGE + '?search=' + encodeURIComponent(query);
       } else {
@@ -817,6 +707,19 @@
      ========================================================================== */
 
   document.addEventListener('DOMContentLoaded', function () {
+    var page = window.location.pathname.split('/').pop() || 'index.html';
+    var params = new URLSearchParams(window.location.search);
+    if (!isUserRegistered() && !['index.html', 'auth.html', ''].includes(page)) { window.location.replace('index.html?registrationRequired=1&returnUrl=' + encodeURIComponent(page + window.location.search)); return; }
+    if (!isUserRegistered() && page === 'index.html' && params.get('registrationRequired') === '1') showRegisterModal(params.get('returnUrl') || null);
+    document.addEventListener('click', function (event) {
+      if (isUserRegistered()) return;
+      var link = event.target.closest('a[href]');
+      if (!link) return;
+      var target = new URL(link.href, window.location.href);
+      var destination = target.pathname.split('/').pop();
+      if (destination === 'index.html' || destination === 'auth.html' || target.origin !== window.location.origin) return;
+      event.preventDefault(); event.stopImmediatePropagation(); showRegisterModal(null, 'navigate:' + target.pathname.split('/').pop() + target.search);
+    }, true);
     // 1. Sync cart & favorites badges across all pages
     syncCartBadges();
     updateFavoritesBadge();
@@ -961,4 +864,5 @@
   });
 
   window.addEventListener('cart:updated', syncCartBadges);
+  window.addEventListener('favorites:updated', function () { updateFavoritesBadge(); syncFavoriteButtons(); });
 })();

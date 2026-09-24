@@ -42,7 +42,7 @@
         </a>
 
         <a aria-label="Shopping Cart" class="relative flex h-10 w-10 items-center justify-center rounded-full text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900" href="cart.html" title="Cart">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
         </a>
 
@@ -201,6 +201,7 @@
 
     function setSavedIds(ids) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+      window.dispatchEvent(new CustomEvent('favorites:updated', { detail: { ids: ids } }));
     }
 
     function makeTitleFromId(id) {
@@ -254,9 +255,9 @@
     function updateHeaderBadge() {
       const count = getSavedIds().length;
       const hasItems = count > 0;
-      favoritesHeaderBadge.textContent = count;
+      favoritesHeaderBadge.textContent = count > 9 ? '9+' : String(count);
       favoritesHeaderBadge.classList.toggle('hidden', !hasItems);
-      mobileBadge.textContent = count;
+      mobileBadge.textContent = count > 9 ? '9+' : String(count);
       mobileBadge.classList.toggle('hidden', !hasItems);
     }
 

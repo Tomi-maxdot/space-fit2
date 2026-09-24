@@ -85,12 +85,12 @@
 </div>
 </div>
 <div class="flex items-center space-x-3 sm:space-x-4">
-<a aria-label="Saved items" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+<a aria-label="Saved items" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
 <span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count>0</span>
 </a>
-<a aria-label="Shopping Cart" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
-<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<a aria-label="Shopping Cart" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
 <span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
 </a>
 <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
@@ -411,22 +411,19 @@ Use my current location
 </label>
 </div>
 <!-- Bank Payout -->
-<div class="p-4 rounded-lg bg-surface border border-surface-variant flex items-center justify-between">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-primary">
-<span class="material-symbols-outlined text-[20px]">account_balance</span>
+<div class="relative p-4 rounded-lg bg-surface border border-surface-variant" id="bankSelector">
+<label class="block mb-2 font-label-md text-label-md text-primary font-semibold" for="bankSearch">Bank</label>
+<div class="flex items-center gap-2"><input id="bankSearch" type="text" autocomplete="off" placeholder="Choose your bank" class="w-full rounded-lg border border-outline-variant bg-white px-3 py-2 text-sm focus:border-primary focus:outline-none" aria-expanded="false" aria-controls="bankOptions"><button id="changeBank" class="hidden text-secondary font-label-md text-label-md hover:underline" type="button">Change</button></div>
+<div id="bankOptions" class="hidden absolute left-4 right-4 top-full z-30 max-h-48 overflow-auto rounded-lg border border-outline-variant bg-white shadow-md"></div>
+<p id="bankNoMatch" class="hidden mt-2 text-sm text-on-surface-variant">No bank found</p><p id="selectedBankAccount" class="hidden mt-2 font-body-sm text-body-sm text-on-surface-variant">Account ending in •••• 4821 (Adeola O.)</p>
 </div>
-<div>
-<p class="font-label-md text-label-md text-primary font-semibold">Guaranty Trust Bank (GTBank)</p>
-<p class="font-body-sm text-body-sm text-on-surface-variant">Account ending in •••• 4821 (Adeola O.)</p>
-</div>
-</div>
-<button class="text-secondary font-label-md text-label-md hover:underline" type="button">Change</button>
-</div>
+<script>
+(function(){var banks=['Access Bank','First Bank','GTBank','Zenith Bank','UBA','Fidelity Bank','Stanbic IBTC','Sterling Bank','Union Bank','Wema Bank','Opay','Kuda','Moniepoint'];var input=document.getElementById('bankSearch'),list=document.getElementById('bankOptions'),change=document.getElementById('changeBank'),none=document.getElementById('bankNoMatch'),account=document.getElementById('selectedBankAccount');if(!input||!list)return;function render(){var q=input.value.trim().toLowerCase(),matches=banks.filter(function(bank){return bank.toLowerCase().includes(q)});list.innerHTML='';matches.forEach(function(bank){var option=document.createElement('button');option.type='button';option.textContent=bank;option.className='block w-full px-3 py-2 text-left text-sm hover:bg-surface-container-low';option.addEventListener('click',function(){input.value=bank;list.classList.add('hidden');none.classList.add('hidden');change.classList.remove('hidden');account.classList.remove('hidden');input.setAttribute('aria-expanded','false')});list.appendChild(option)});none.classList.toggle('hidden',matches.length>0);list.classList.toggle('hidden',matches.length===0);input.setAttribute('aria-expanded',String(matches.length>0))}input.addEventListener('focus',render);input.addEventListener('input',render);change.addEventListener('click',function(){input.value='';account.classList.add('hidden');change.classList.add('hidden');input.focus();render()});document.addEventListener('click',function(e){if(!e.target.closest('#bankSelector'))list.classList.add('hidden')})})();
+</script>
 </div>
 </div>
 <!-- ======================= RIGHT COLUMN: COMPACT STICKY LIVE PREVIEW & EARNINGS (~33%) ======================= -->
-<div id="livePreviewPanel" class="hidden lg:block lg:col-span-4 xl:col-span-4 lg:sticky lg:top-20 max-h-[calc(100vh-6rem)] overflow-y-auto space-y-4 pr-1">
+<div id="livePreviewPanel" class="hidden lg:block lg:col-span-4 xl:col-span-4 lg:sticky lg:top-20 space-y-4 pr-1">
 <!-- Compact Sticky Live Preview Card Container -->
 <div class="bg-surface-container-lowest rounded-xl border border-surface-variant shadow-sm overflow-hidden text-xs">
 <div class="px-3.5 py-2.5 border-b border-surface-variant flex items-center justify-between bg-surface-container-low/50">
@@ -1344,4 +1341,5 @@ Back to editing
       }
     });
   </script>
+<script src="script.js"></script>
 </body></html>

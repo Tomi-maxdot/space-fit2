@@ -68,8 +68,8 @@
                 <a href="product-details.html" class="text-sm font-medium text-on-surface-variant hover:text-primary transition">Products</a>
             </nav>
             <div class="flex items-center gap-3 sm:gap-4">
-                <a aria-label="Saved items" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                <a aria-label="Saved items" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
                     <span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count>0</span>
                 </a>
                 <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
@@ -264,44 +264,6 @@
 
 
     <!-- ================= FOOTER ================= -->
-
-    <footer class="bg-surface-container-low mt-16">
-
-        <div class="max-w-[1200px] mx-auto px-6 py-10">
-
-            <div class="flex flex-col md:flex-row justify-between gap-6">
-
-                <div>
-
-                    <h2 class="font-headline text-2xl font-semibold text-primary mb-2">
-                        SpaceFit
-                    </h2>
-
-                    <p class="text-sm text-on-surface-variant max-w-md">
-                        Furniture and spatial pieces designed around your
-                        space, style and budget.
-                    </p>
-
-                </div>
-
-
-                <div class="text-sm text-on-surface-variant md:text-right">
-
-                    <p>
-                        ₦ NGN • Lagos, NG
-                    </p>
-
-                    <p class="text-xs text-outline mt-2">
-                        © 2025 SpaceFit Studio Limited.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </footer>
 
 
 
@@ -628,39 +590,18 @@
         */
 
         function isItemFavorited(name) {
-            try {
-                const favs = JSON.parse(localStorage.getItem('spacefitSavedItemIds') || '[]');
-                return favs.includes(name);
-            } catch (e) {
-                return false;
-            }
+            const cartItem = (window.getCartItems ? window.getCartItems() : []).find(item => (item.title || item.name) === name);
+            const normalized = cartItem ? cartItem.id : String(name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            try { return JSON.parse(localStorage.getItem('spacefitSavedItemIds') || '[]').includes(normalized); }
+            catch (e) { return false; }
         }
 
         function toggleFavoriteFromCart(encodedName, btn) {
             const name = decodeURIComponent(encodedName);
-            let favs = JSON.parse(localStorage.getItem('spacefitSavedItemIds') || '[]');
-            const index = favs.indexOf(name);
-            let added = false;
-
-            if (index > -1) {
-                favs.splice(index, 1);
-            } else {
-                favs.push(name);
-                added = true;
-            }
-
-            localStorage.setItem('spacefitSavedItemIds', JSON.stringify(favs));
-
-            if (window.SpaceFit && typeof window.SpaceFit.showFavoriteToast === 'function') {
-                window.SpaceFit.showFavoriteToast(added ? 'Added to favorites' : 'Removed from favorites');
-                window.SpaceFit.syncFavoritesBadges();
-            }
-
+            const cartItem = (window.getCartItems ? window.getCartItems() : []).find(item => (item.title || item.name) === name);
+            if (window.SpaceFitFavorites) window.SpaceFitFavorites.toggle(cartItem ? cartItem.id : name);
             displayCart();
         }
-
-
-
         /*
         -----------------------------------------
         CHANGE QUANTITY

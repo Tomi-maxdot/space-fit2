@@ -171,12 +171,12 @@
                     <a class="relative py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full" data-path="products" href="product-details.html">Products</a>
                 </nav>
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <a aria-label="Saved items" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                    <a aria-label="Saved items" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
                         <span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count>0</span>
                     </a>
-                    <a aria-label="Shopping Cart" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    <a aria-label="Shopping Cart" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                         <span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
                     </a>
                     <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
@@ -203,7 +203,7 @@
                                 class="w-full h-full object-cover transition-opacity duration-300"
                                 src="" alt="Product Image" />
                             <button aria-label="Add to wishlist"
-                                class="absolute top-3 right-3 w-9 h-9 rounded-full bg-surface-container-lowest/90 hover:bg-surface-container-lowest text-on-surface flex items-center justify-center transition-transform active:scale-90 shadow-sm"
+                                class="absolute top-3 right-3 w-11 h-11 rounded-full bg-surface-container-lowest/90 hover:bg-surface-container-lowest text-on-surface flex items-center justify-center transition-transform active:scale-90 shadow-sm"
                                 onclick="toggleFavorite(this)">
                                 <span class="material-symbols-outlined text-lg">favorite</span>
                             </button>
@@ -361,58 +361,6 @@
     </main>
 
     <!-- Footer -->
-    <footer class="w-full bg-surface-container-low text-on-surface-variant mt-space-2xl">
-        <div class="max-w-[1360px] mx-auto px-margin pt-space-2xl pb-space-xl">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg pb-space-2xl border-b border-outline-variant/30">
-                <div class="lg:col-span-5 space-y-space-md">
-                    <span class="font-headline-md text-headline-md text-primary tracking-tight block">SpaceFit</span>
-                    <p class="font-body-md text-body-md text-on-surface-variant max-w-md">
-                        Curated architectural pieces, sculptural ceramics, and mindful spatial furniture designed for deliberate contemporary living.
-                    </p>
-                </div>
-                <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-gutter">
-                    <div class="space-y-space-sm">
-                        <h4 class="font-headline-sm text-headline-sm text-on-surface">Collections</h4>
-                        <ul class="space-y-space-xs font-body-md text-body-md">
-                            <li class="hover:text-primary transition-colors"><a data-path="living-room" href="index.html">Living Room</a></li>
-                            <li class="hover:text-primary transition-colors"><a data-path="bedroom" href="index.html">Bedroom Sanctuary</a></li>
-                            <li class="hover:text-primary transition-colors"><a data-path="dining" href="index.html">Dining &amp; Vessels</a></li>
-                            <li class="hover:text-primary transition-colors"><a data-path="workspaces" href="index.html">Executive Studios</a></li>
-                            <li class="hover:text-primary transition-colors"><a data-path="lighting" href="index.html">Architectural Lighting</a></li>
-                        </ul>
-                    </div>
-                    <div class="space-y-space-sm">
-                        <h4 class="font-headline-sm text-headline-sm text-on-surface">Showrooms &amp; Care</h4>
-                        <ul class="space-y-space-xs font-body-md text-body-md">
-                            <li><a class="hover:text-primary transition-colors" href="#">Lagos Flagship Gallery</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">Abuja Design Suite</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">Care &amp; Timber Maintenance</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">White-Glove Delivery</a></li>
-                            <li><a class="hover:text-primary transition-colors" href="#">Order Inquiries</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="pt-space-xl flex flex-col md:flex-row items-center justify-between gap-space-lg font-body-sm text-body-sm">
-                <div class="flex items-center gap-space-md">
-                    <div class="flex items-center gap-space-xs bg-surface-container px-space-md py-space-xs rounded-full">
-                        <span class="material-symbols-outlined text-base text-primary">public</span>
-                        <span class="font-label-sm text-label-sm text-on-surface">₦ NGN • Lagos, NG</span>
-                    </div>
-                    <span class="text-outline">© 2025 SpaceFit Studio Limited. Handcrafted for space harmony.</span>
-                </div>
-                <div class="flex items-center gap-space-md text-outline font-label-sm text-label-sm">
-                    <span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-base">verified_user</span> Encrypted Checkout</span>
-                    <span class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-base">local_shipping</span> Insured Nationwide</span>
-                    <div class="flex items-center gap-space-sm ml-space-sm text-on-surface-variant">
-                        <span class="font-bold tracking-widest text-[10px] bg-surface-container px-2 py-1 rounded">PAYSTACK</span>
-                        <span class="font-bold tracking-widest text-[10px] bg-surface-container px-2 py-1 rounded">VISA</span>
-                        <span class="font-bold tracking-widest text-[10px] bg-surface-container px-2 py-1 rounded">MASTERCARD</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- Interactive JavaScript -->
     <script>
@@ -934,7 +882,7 @@
                             <span class="border border-stone-200 bg-white/95 text-stone-700 text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">${rel.condition || 'Verified'}</span>
                         </div>
                         <button aria-label="Save to favorites" class="favorite-toggle absolute top-2 right-2 w-11 h-11 rounded-full border border-stone-200 bg-white/90 hover:bg-white text-stone-700 flex items-center justify-center transition-transform active:scale-90 shadow-sm" onclick="toggleFavorite(this)">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
                         </button>
                     </div>
                     <div class="p-2 sm:p-2.5 flex flex-col flex-1 justify-between gap-1.5">
