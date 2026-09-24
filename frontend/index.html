@@ -40,8 +40,8 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between gap-4">
 <div class="flex items-center gap-6">
 <a class="flex items-center gap-2.5 focus:outline-none group" href="index.html">
-<img alt="SpaceFit icon" class="h-9 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="../assets/icon/SpaceFit_icon.png">
-<img alt="SpaceFit wordmark" class="h-5 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="../assets/icon/SpaceFit_wordmark.png">
+<img alt="SpaceFit icon" class="h-9 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="../frontend/assets/icon/SpaceFit_icon.png">
+<img alt="SpaceFit wordmark" class="h-5 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="../frontend/assets/icon/SpaceFit_wordmark.png">
 </a>
 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-stone-700">
 <a class="hover:text-stone-950 transition-colors" href="index.html">Home</a>
@@ -67,9 +67,9 @@
 <span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
 </a>
 <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
-<button aria-label="User profile" class="flex items-center gap-2 p-1.5 text-stone-700 hover:text-stone-950 rounded-full hover:bg-stone-100 transition-colors focus:outline-none">
+<a aria-label="User profile" href="auth.html" class="flex items-center gap-2 p-1.5 text-stone-700 hover:text-stone-950 rounded-full hover:bg-stone-100 transition-colors focus:outline-none">
 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-</button>
+</a>
 <button aria-label="Open mobile menu" class="md:hidden p-2 text-stone-700 hover:text-stone-950 focus:outline-none" id="mobileMenuBtn">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
 </button>
@@ -96,7 +96,7 @@
   <div class="relative w-full h-[700px] sm:h-[760px] lg:h-[840px] overflow-hidden bg-stone-900">
     <!-- Slide 1 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-100 z-10" data-slide-index="0">
-      <img src="../assets/carousell/Contemporary%20Living%20Room%20Design.jpg" alt="Contemporary Living Room Design" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Contemporary%20Living%20Room%20Design.jpg" alt="Contemporary Living Room Design" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -110,7 +110,7 @@
 
     <!-- Slide 2 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0 pointer-events-none" data-slide-index="1">
-      <img src="../assets/carousell/Bedroom%20Wardrobe%20Design.jpg" alt="Bedroom Wardrobe Design" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Bedroom%20Wardrobe%20Design.jpg" alt="Bedroom Wardrobe Design" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -124,7 +124,7 @@
 
     <!-- Slide 3 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0 pointer-events-none" data-slide-index="2">
-      <img src="../assets/carousell/Clever%20Wardrobe%20Design%20For%20Out-Of-The-Box%20Bedrooms.jpg" alt="Clever Wardrobe Design For Out-Of-The-Box Bedrooms" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Clever%20Wardrobe%20Design%20For%20Out-Of-The-Box%20Bedrooms.jpg" alt="Clever Wardrobe Design For Out-Of-The-Box Bedrooms" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -138,7 +138,7 @@
 
     <!-- Slide 4 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0 pointer-events-none" data-slide-index="3">
-      <img src="../assets/carousell/Cozy%20Wooden%20Desk%20Setup.jpg" alt="Cozy Wooden Desk Setup" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Cozy%20Wooden%20Desk%20Setup.jpg" alt="Cozy Wooden Desk Setup" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -152,7 +152,7 @@
 
     <!-- Slide 5 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0 pointer-events-none" data-slide-index="4">
-      <img src="../assets/carousell/Modern%20living%20space.jpg" alt="Modern living space" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Modern%20living%20space.jpg" alt="Modern living space" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -166,7 +166,7 @@
 
     <!-- Slide 6 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0 pointer-events-none" data-slide-index="5">
-      <img src="../assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg" alt="Scandinavian-style home office with a minimalist desk, ergonomic chair, and built-in shelves" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg" alt="Scandinavian-style home office with a minimalist desk, ergonomic chair, and built-in shelves" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -180,7 +180,7 @@
 
     <!-- Slide 7 -->
     <div class="hero-slide absolute inset-0 transition-opacity duration-700 opacity-0 z-0 pointer-events-none" data-slide-index="6">
-      <img src="../assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg" alt="Serene living room with sectional sofa and abstract art coffee table floor lamp" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
+      <img src="../frontend/assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg" alt="Serene living room with sectional sofa and abstract art coffee table floor lamp" class="w-full h-full object-cover object-center transform scale-100 transition-transform duration-1000">
       <div class="absolute inset-0 bg-gradient-to-r from-[#FBF9F5]/95 via-[#FBF9F5]/85 to-transparent sm:w-2/3 lg:w-3/5"></div>
       <div class="absolute inset-0 bg-black/20"></div>
       <div class="absolute bottom-6 right-6 hidden md:flex items-center gap-3 bg-black/40 backdrop-blur-md border border-white/20 text-white px-4 py-2.5 rounded-2xl shadow-lg z-20">
@@ -279,7 +279,7 @@
 <!-- Category 1: Beds -->
 <a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="#beds">
 <div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="bed frame" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../assets/shop%20by%20category/bed%20frame.jpg">
+<img alt="bed frame" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../frontend/assets/shop%20by%20category/bed%20frame.jpg">
 </div>
 <span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Beds</span>
 <span class="text-[11px] text-stone-400 mt-0.5">84 models</span>
@@ -287,7 +287,7 @@
 <!-- Category 2: Mattresses -->
 <a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="#mattresses">
 <div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="mattress" class="w-full h-full object-cover object-bottom group-hover:scale-110 transition-transform duration-500" src="../assets/shop%20by%20category/mattress.jpg">
+<img alt="mattress" class="w-full h-full object-cover object-bottom group-hover:scale-110 transition-transform duration-500" src="../frontend/assets/shop%20by%20category/mattress.jpg">
 </div>
 <span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Mattresses</span>
 <span class="text-[11px] text-stone-400 mt-0.5">42 models</span>
@@ -295,7 +295,7 @@
 <!-- Category 3: Wardrobes -->
 <a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="#wardrobes">
 <div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="wardrobe" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../assets/shop%20by%20category/wardrobe.jpg">
+<img alt="wardrobe" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../frontend/assets/shop%20by%20category/wardrobe.jpg">
 </div>
 <span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Wardrobes</span>
 <span class="text-[11px] text-stone-400 mt-0.5">56 models</span>
@@ -303,7 +303,7 @@
 <!-- Category 4: Desks -->
 <a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="#desks">
 <div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="desk" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../assets/shop%20by%20category/desk.jpg">
+<img alt="desk" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../frontend/assets/shop%20by%20category/desk.jpg">
 </div>
 <span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Desks</span>
 <span class="text-[11px] text-stone-400 mt-0.5">63 models</span>
@@ -311,7 +311,7 @@
 <!-- Category 5: Nightstands -->
 <a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="#nightstands">
 <div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="nightstand" class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500" src="../assets/shop%20by%20category/nightstand.jpg">
+<img alt="nightstand" class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500" src="../frontend/assets/shop%20by%20category/nightstand.jpg">
 </div>
 <span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Nightstands</span>
 <span class="text-[11px] text-stone-400 mt-0.5">38 models</span>
@@ -319,7 +319,7 @@
 <!-- Category 6: Rugs -->
 <a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="#rugs">
 <div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="rugs" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../assets/shop%20by%20category/rugs.jpg">
+<img alt="rugs" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="../frontend/assets/shop%20by%20category/rugs.jpg">
 </div>
 <span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Rugs</span>
 <span class="text-[11px] text-stone-400 mt-0.5">29 models</span>
@@ -346,7 +346,7 @@
 <article class="bg-white rounded-2xl border border-[#E7E3DC] overflow-hidden flex flex-col justify-between hover:shadow-lg transition-all duration-300 group" data-purpose="product-card">
 <div>
 <div class="relative aspect-4/3 w-full bg-stone-100 overflow-hidden">
-<img alt="lunabedframe" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../assets/featured%20product/lunabedframe.jpg">
+<img alt="lunabedframe" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/featured%20product/lunabedframe.jpg">
 <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-[10px] font-bold text-stone-700 px-2 py-1 rounded-md uppercase tracking-wider">
                   Handcrafted Oak
                 </span>
@@ -374,7 +374,7 @@
 <article class="bg-white rounded-2xl border border-[#E7E3DC] overflow-hidden flex flex-col justify-between hover:shadow-lg transition-all duration-300 group" data-purpose="product-card">
 <div>
 <div class="relative aspect-4/3 w-full bg-stone-100 overflow-hidden">
-<img alt="cloud bedding" class="w-full h-full object-cover object-bottom group-hover:scale-105 transition-transform duration-500" src="../assets/featured%20product/cloud%20bedding.jpg">
+<img alt="cloud bedding" class="w-full h-full object-cover object-bottom group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/featured%20product/cloud%20bedding.jpg">
 <span class="absolute top-3 left-3 bg-emerald-50 text-emerald-800 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border border-emerald-200">
                   Verified Seller
                 </span>
@@ -402,7 +402,7 @@
 <article class="bg-white rounded-2xl border border-[#E7E3DC] overflow-hidden flex flex-col justify-between hover:shadow-lg transition-all duration-300 group" data-purpose="product-card">
 <div>
 <div class="relative aspect-4/3 w-full bg-stone-100 overflow-hidden">
-<img alt="solid wardrobe" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../assets/featured%20product/solid%20wardrobe.jpg">
+<img alt="solid wardrobe" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/featured%20product/solid%20wardrobe.jpg">
 <span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-[10px] font-bold text-stone-700 px-2 py-1 rounded-md uppercase tracking-wider">
                   3-Door Minimal
                 </span>
@@ -430,7 +430,7 @@
 <article class="bg-white rounded-2xl border border-[#E7E3DC] overflow-hidden flex flex-col justify-between hover:shadow-lg transition-all duration-300 group" data-purpose="product-card">
 <div>
 <div class="relative aspect-4/3 w-full bg-stone-100 overflow-hidden">
-<img alt="novo workdesk" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../assets/featured%20product/novo%20workdesk.jpg">
+<img alt="novo workdesk" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/featured%20product/novo%20workdesk.jpg">
 <span class="absolute top-3 left-3 bg-amber-50 text-amber-800 text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border border-amber-200">
                   Popular Compact
                 </span>
@@ -470,7 +470,7 @@
 <!-- Scenario Card 1 -->
 <div class="bg-white rounded-2xl overflow-hidden border border-[#E7E3DC] flex flex-col group hover:shadow-md transition-shadow">
 <div class="aspect-16/10 overflow-hidden bg-stone-100">
-<img alt="bedroom" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../assets/create%20your%20perfect%20workspace/bedroom.jpg">
+<img alt="bedroom" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/create%20your%20perfect%20workspace/bedroom.jpg">
 </div>
 <div class="p-5 flex-1 flex flex-col justify-between">
 <div>
@@ -485,7 +485,7 @@
 <!-- Scenario Card 2 -->
 <div class="bg-white rounded-2xl overflow-hidden border border-[#E7E3DC] flex flex-col group hover:shadow-md transition-shadow">
 <div class="aspect-16/10 overflow-hidden bg-stone-100">
-<img alt="workspace" class="w-full h-full object-cover object-bottom group-hover:scale-105 transition-transform duration-500" src="../assets/create%20your%20perfect%20workspace/workspace.jpg">
+<img alt="workspace" class="w-full h-full object-cover object-bottom group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/create%20your%20perfect%20workspace/workspace.jpg">
 </div>
 <div class="p-5 flex-1 flex flex-col justify-between">
 <div>
@@ -500,7 +500,7 @@
 <!-- Scenario Card 3 -->
 <div class="bg-white rounded-2xl overflow-hidden border border-[#E7E3DC] flex flex-col group hover:shadow-md transition-shadow">
 <div class="aspect-16/10 overflow-hidden bg-stone-100">
-<img alt="apartment" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" src="../assets/create%20your%20perfect%20workspace/apartment.jpg">
+<img alt="apartment" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500" src="../frontend/assets/create%20your%20perfect%20workspace/apartment.jpg">
 </div>
 <div class="p-5 flex-1 flex flex-col justify-between">
 <div>
@@ -568,8 +568,8 @@
 <!-- Brand Summary Column -->
 <div class="col-span-2 space-y-4 pr-4">
 <a class="inline-flex items-center gap-2.5" href="#">
-<img alt="SpaceFit icon" class="h-8 w-auto object-contain" src="../assets/icon/SpaceFit_icon.png">
-<img alt="SpaceFit wordmark" class="h-5 w-auto object-contain" src="../assets/icon/SpaceFit_wordmark.png">
+<img alt="SpaceFit icon" class="h-8 w-auto object-contain" src="../frontend/assets/icon/SpaceFit_icon.png">
+<img alt="SpaceFit wordmark" class="h-5 w-auto object-contain" src="../frontend/assets/icon/SpaceFit_wordmark.png">
 </a>
 <p class="text-stone-500 text-xs leading-relaxed max-w-sm">
             SpaceFit is Nigeria’s modern furniture marketplace. We connect conscious homemakers, interior lovers, and makers to trade beautiful furniture for every space.
