@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpaceFit — Favorites</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { brown: '#543A23', orange: '#F38B00', cream: '#FBF9F5', surface: '#F5F2EB', muted: '#8C857B', dark: '#1F1E1D', border: '#E7E3DC', sage: '#3A5A40' }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+</head>
+<body class="min-h-screen bg-[#FBF9F5] text-[#1F1E1D] antialiased selection:bg-orange-100 selection:text-amber-900">
+  <header class="sticky top-0 z-40 border-b border-[#E7E3DC] bg-[#FBF9F5]/95">
+    <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+      <a class="flex items-center gap-2.5 focus:outline-none group" href="index.html" aria-label="Go to home page">
+        <img alt="SpaceFit icon" class="h-8 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="assets/icon/SpaceFit_icon.png" />
+        <img alt="SpaceFit wordmark" class="h-5 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="assets/icon/SpaceFit_wordmark.png" />
+      </a>
+
+      <div class="flex items-center gap-3 sm:gap-4">
+        <a id="favoritesHeaderButton" aria-label="Saved items" class="relative flex h-10 w-10 items-center justify-center rounded-full text-[#543A23] transition-colors hover:bg-stone-100" href="favourite.html" title="Saved items">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+          </svg>
+          <span id="favoritesHeaderBadge" class="hidden absolute -top-1 -right-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#F38B00] px-1 text-[10px] font-bold text-white">0</span>
+        </a>
+
+        <a aria-label="Shopping Cart" class="relative flex h-10 w-10 items-center justify-center rounded-full text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900" href="cart.html" title="Cart">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+        </a>
+
+        <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
+
+        <a aria-label="User profile" href="auth.html" class="flex h-10 w-10 items-center justify-center rounded-full text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900" title="Profile">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <div class="mx-auto max-w-7xl px-4 pb-24 pt-6 sm:px-6 lg:px-8">
+      <div id="searchWrap" class="hidden relative mb-6">
+        <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-stone-500">
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+        </span>
+        <input id="favoritesSearch" class="w-full rounded-full border border-[#E7E3DC] bg-white py-2.5 pl-10 pr-10 text-sm text-stone-800 placeholder:text-stone-400 focus:border-[#543A23] focus:outline-none" placeholder="Search saved items" type="text" />
+        <button id="clearSearchBtn" type="button" class="hidden absolute inset-y-0 right-0 flex items-center pr-3.5 text-stone-500 hover:text-stone-800" aria-label="Clear search">×</button>
+      </div>
+
+      <div id="emptyState" class="flex min-h-[60vh] flex-col items-center justify-center text-center">
+        <div class="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[#E7E3DC] bg-[#F5F2EB] text-[#543A23]">
+          <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+        </div>
+        <h1 class="text-2xl font-bold text-[#1F1E1D]">No favorites yet</h1>
+        <p class="mt-2 max-w-md text-sm text-stone-600">Tap the bookmark icon on any item to save it here.</p>
+        <a href="shop.html" class="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#543A23] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#433019]">Browse items</a>
+      </div>
+
+      <div id="itemsArea" class="hidden">
+        <div id="resultsBox" class="hidden flex-col items-center justify-center rounded-2xl border border-[#E7E3DC] bg-white px-5 py-16 text-center">
+          <span class="material-symbols-outlined text-[42px] text-stone-400">search_off</span>
+          <h2 class="mt-3 text-2xl font-bold text-[#1F1E1D]">No items found</h2>
+          <p class="mt-2 max-w-md text-sm text-stone-600">None of your saved items matched. Try a different word.</p>
+          <button id="clearResultsBtn" type="button" class="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-[#543A23] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#433019]">Clear search</button>
+        </div>
+
+        <div id="favoritesGrid" class="grid grid-cols-2 gap-4 lg:grid-cols-4"></div>
+
+        <div id="showingBar" class="mt-8 hidden border-t border-[#E7E3DC] pt-4 text-sm text-stone-500">
+          <span id="showingText">Showing 0 items</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div id="mobileNav" class="fixed bottom-0 left-0 right-0 z-40 border-t border-[#E7E3DC] bg-[#FBF9F5] md:hidden">
+    <div class="grid grid-cols-5 items-center px-2 py-2">
+      <a class="flex flex-col items-center justify-center py-2 text-stone-500" href="index.html">
+        <span class="material-symbols-outlined text-[22px]">home</span>
+        <span class="mt-1 text-[10px]">Home</span>
+      </a>
+      <a class="flex flex-col items-center justify-center py-2 text-stone-500" href="shop.html">
+        <span class="material-symbols-outlined text-[22px]">search</span>
+        <span class="mt-1 text-[10px]">Search</span>
+      </a>
+      <a class="flex flex-col items-center justify-center py-2 text-[#543A23]" href="sell.html">
+        <div class="flex h-8 w-8 items-center justify-center rounded-full bg-[#F38B00] text-white">
+          <span class="material-symbols-outlined text-[18px]">add</span>
+        </div>
+        <span class="mt-1 text-[10px] font-bold">Sell</span>
+      </a>
+      <a class="flex flex-col items-center justify-center py-2 text-[#543A23]" href="favourite.html">
+        <div class="relative">
+          <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
+          <span id="mobileBadge" class="hidden absolute -top-1 -right-2 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#F38B00] px-1 text-[9px] font-bold text-white">0</span>
+        </div>
+        <span class="mt-1 text-[10px] font-bold">Favorites</span>
+      </a>
+      <button id="mobileProfileButton" type="button" class="flex flex-col items-center justify-center py-2 text-stone-500">
+        <div class="flex h-5 w-5 items-center justify-center rounded-full bg-[#F5F2EB] text-[10px] font-bold text-stone-600">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+        </div>
+        <span class="mt-1 text-[10px]">Profile</span>
+      </button>
+    </div>
+  </div>
+
+  <div id="profileOverlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-[#FBF9F5]/95 px-4 py-6">
+    <div class="relative w-full max-w-md rounded-2xl border border-[#E7E3DC] bg-white p-6 shadow-sm sm:p-7">
+      <button id="closeProfileModal" type="button" class="absolute right-4 top-4 text-2xl text-stone-500" aria-label="Close">×</button>
+      <div class="mb-6">
+        <p id="profileModeLabel" class="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">Register / Sign in</p>
+        <h2 id="profileTitle" class="mt-2 text-2xl font-bold text-[#1F1E1D]">Welcome</h2>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-[#1F1E1D]" for="profileName">Full name</label>
+          <input id="profileName" class="h-11 w-full rounded-lg border border-[#E7E3DC] bg-[#FBF9F5] px-3 text-sm text-[#1F1E1D] placeholder:text-stone-400 focus:border-[#543A23] focus:outline-none" type="text" placeholder="Chidinma Okafor" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-[#1F1E1D]" for="profileEmail">Email address</label>
+          <input id="profileEmail" class="h-11 w-full rounded-lg border border-[#E7E3DC] bg-[#FBF9F5] px-3 text-sm text-[#1F1E1D] placeholder:text-stone-400 focus:border-[#543A23] focus:outline-none" type="email" placeholder="you@example.com" />
+        </div>
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-[#1F1E1D]" for="profilePassword">Password</label>
+          <input id="profilePassword" class="h-11 w-full rounded-lg border border-[#E7E3DC] bg-[#FBF9F5] px-3 text-sm text-[#1F1E1D] placeholder:text-stone-400 focus:border-[#543A23] focus:outline-none" type="password" placeholder="••••••••" />
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-center gap-3">
+        <button id="primaryAuthAction" type="button" class="inline-flex h-11 flex-1 items-center justify-center rounded-full bg-[#543A23] text-sm font-semibold text-white hover:bg-[#433019]">Create account</button>
+        <button id="secondaryAuthAction" type="button" class="inline-flex h-11 items-center justify-center rounded-full border border-[#E7E3DC] bg-white px-5 text-sm font-semibold text-[#1F1E1D] hover:bg-[#F5F2EB]">Sign in</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    const STORAGE_KEY = 'spacefitSavedItemIds';
+    const DEFAULT_ITEM_LOOKUP = {
+      'luna-bed-frame': { title: 'Luna Bed Frame', category: 'Bedroom', condition: 'Like new', location: 'Lagos', description: 'Solid oak bed frame with curved headboard.', specs: ['Material: Oak', 'Size: Queen'] },
+      'comfort-cloud-mattress': { title: 'Comfort Cloud Mattress', category: 'Bedroom', condition: 'Like new', location: 'Abuja', description: 'Orthopedic dual-layer mattress in excellent condition.', specs: ['Material: Foam', 'Size: Queen'] },
+      'aspen-solid-wardrobe': { title: 'Aspen Solid Wardrobe', category: 'Storage', condition: 'Good condition', location: 'Ibadan', description: 'Three-door wardrobe with soft-close hinges.', specs: ['Material: Ash wood', 'Size: 3-door'] },
+      'novo-work-desk': { title: 'Novo Work Desk', category: 'Workspace', condition: 'Good condition', location: 'Lagos', description: 'Compact desk with cable routing and tapered legs.', specs: ['Material: Wood', 'Size: 120cm'] },
+      'siena-lounge-chair': { title: 'Siena Lounge Chair', category: 'Living room', condition: 'Good condition', location: 'Port Harcourt', description: 'Comfortable accent chair with soft fabric finish.', specs: ['Material: Fabric', 'Style: Modern'] },
+      'nairobi-side-table': { title: 'Nairobi Side Table', category: 'Living room', condition: 'Brand new', location: 'Kano', description: 'Minimal round table for compact spaces.', specs: ['Material: Walnut', 'Size: Medium'] }
+    };
+
+    const favoritesHeaderButton = document.getElementById('favoritesHeaderButton');
+    const favoritesHeaderBadge = document.getElementById('favoritesHeaderBadge');
+    const mobileBadge = document.getElementById('mobileBadge');
+    const searchWrap = document.getElementById('searchWrap');
+    const favoritesSearch = document.getElementById('favoritesSearch');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const emptyState = document.getElementById('emptyState');
+    const itemsArea = document.getElementById('itemsArea');
+    const favoritesGrid = document.getElementById('favoritesGrid');
+    const resultsBox = document.getElementById('resultsBox');
+    const showingBar = document.getElementById('showingBar');
+    const showingText = document.getElementById('showingText');
+    const profileButton = document.getElementById('profileButton');
+    const mobileProfileButton = document.getElementById('mobileProfileButton');
+    const profileOverlay = document.getElementById('profileOverlay');
+    const closeProfileModal = document.getElementById('closeProfileModal');
+    const profileModeLabel = document.getElementById('profileModeLabel');
+    const profileTitle = document.getElementById('profileTitle');
+    const primaryAuthAction = document.getElementById('primaryAuthAction');
+    const secondaryAuthAction = document.getElementById('secondaryAuthAction');
+
+    let isRegistered = false;
+
+    function getSavedIds() {
+      try {
+        const ids = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        return Array.isArray(ids) ? ids.filter(Boolean).map(String) : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function setSavedIds(ids) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(ids));
+    }
+
+    function makeTitleFromId(id) {
+      return String(id || '').split('-').filter(Boolean).map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
+    }
+
+    function buildItem(id) {
+      const lookup = DEFAULT_ITEM_LOOKUP[id] || {};
+      return {
+        id,
+        title: lookup.title || makeTitleFromId(id),
+        category: lookup.category || 'Home',
+        condition: lookup.condition || 'Good condition',
+        location: lookup.location || 'Lagos',
+        description: lookup.description || 'Saved from the marketplace.',
+        specs: lookup.specs || ['Material: Wood', 'Condition: Good'],
+        price: 120000,
+        originalPrice: 150000,
+        priceDrop: Math.random() > 0.6
+      };
+    }
+
+    function getSavedItems() {
+      return getSavedIds().map(buildItem);
+    }
+
+    function getFilteredItems() {
+      const query = (favoritesSearch.value || '').trim().toLowerCase();
+      const items = getSavedItems();
+      if (!query) return items;
+
+      return items.filter(item => {
+        const haystack = [
+          item.title,
+          item.category,
+          item.condition,
+          item.location,
+          item.description,
+          ...(item.specs || [])
+        ]
+          .join(' ')
+          .toLowerCase()
+          .replace(/[^a-z0-9\s]/g, ' ')
+          .split(/\s+/)
+          .filter(Boolean);
+
+        return haystack.some(word => word.startsWith(query) || word.includes(query));
+      });
+    }
+
+    function updateHeaderBadge() {
+      const count = getSavedIds().length;
+      const hasItems = count > 0;
+      favoritesHeaderBadge.textContent = count;
+      favoritesHeaderBadge.classList.toggle('hidden', !hasItems);
+      mobileBadge.textContent = count;
+      mobileBadge.classList.toggle('hidden', !hasItems);
+    }
+
+    function openProfileOverlay() {
+      const isGuest = !isRegistered;
+      profileModeLabel.textContent = isGuest ? 'Register / Sign in' : 'Your profile';
+      profileTitle.textContent = isGuest ? 'Welcome' : 'Your profile';
+      primaryAuthAction.textContent = isGuest ? 'Create account' : 'View saved items';
+      secondaryAuthAction.textContent = isGuest ? 'Sign in' : 'Edit profile';
+      profileOverlay.classList.remove('hidden');
+      profileOverlay.classList.add('flex');
+    }
+
+    function closeProfileOverlay() {
+      profileOverlay.classList.add('hidden');
+      profileOverlay.classList.remove('flex');
+    }
+
+    function renderFavorites() {
+      const savedItems = getSavedItems();
+      const hasItems = savedItems.length > 0;
+      const query = (favoritesSearch.value || '').trim();
+
+      emptyState.classList.toggle('hidden', hasItems);
+      searchWrap.classList.toggle('hidden', !hasItems);
+      itemsArea.classList.toggle('hidden', !hasItems);
+      showingBar.classList.toggle('hidden', !hasItems);
+
+      if (!hasItems) {
+        updateHeaderBadge();
+        return;
+      }
+
+      const filtered = getFilteredItems();
+
+      favoritesGrid.innerHTML = filtered.map(item => `
+        <article class="relative overflow-hidden rounded-2xl border border-[#E7E3DC] bg-white flex flex-col justify-between">
+          <div class="relative aspect-[4/3] bg-[#F5F2EB]">
+            ${item.image ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">` : '<div class="absolute inset-0 bg-stone-200/40"></div>'}
+            <button type="button" class="remove-favorite absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full border border-[#E7E3DC] bg-white/95 text-[#543A23] shadow-sm transition-transform active:scale-90" data-id="${item.id}" aria-label="Remove ${item.title} from favorites">
+              <svg class="h-5 w-5" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+            </button>
+          </div>
+          <div class="space-y-2 p-3.5 flex flex-col flex-1 justify-between">
+            <div class="space-y-1">
+              <div class="flex items-center justify-between gap-2 text-[11px] text-stone-500">
+                <span>${item.category || 'Furniture'}</span>
+                <span>${item.condition || 'Verified'}</span>
+              </div>
+              <h3 class="text-sm font-bold text-[#1F1E1D] line-clamp-1">${item.title}</h3>
+              <p class="text-xs text-stone-500">${item.location || 'Lagos'}</p>
+            </div>
+            <div class="flex items-center justify-between pt-2 border-t border-stone-100">
+              <span class="text-sm sm:text-base font-bold text-[#543A23]">₦${Number(item.price || 0).toLocaleString('en-NG')}</span>
+              <button type="button" onclick="window.SpaceFit ? window.SpaceFit.triggerAddToCart('${item.title.replace(/'/g, "\\'")}') : null" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#543A23] hover:bg-[#F38B00] text-white text-xs font-semibold transition-colors active:scale-95 shadow-sm" title="Add to cart" aria-label="Add to cart">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <span>Add</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      const noResults = filtered.length === 0;
+      resultsBox.classList.toggle('hidden', !noResults);
+      favoritesGrid.classList.toggle('hidden', noResults);
+
+      showingText.textContent = `Showing ${filtered.length} item${filtered.length === 1 ? '' : 's'}`;
+      showingBar.classList.toggle('hidden', filtered.length === 0 && !query);
+
+      favoritesGrid.querySelectorAll('.remove-favorite').forEach(button => {
+        button.addEventListener('click', () => {
+          const id = button.getAttribute('data-id');
+          const ids = getSavedIds();
+          const next = ids.filter(itemId => itemId !== id);
+          setSavedIds(next);
+          if (next.length === 0) {
+            favoritesSearch.value = '';
+          }
+          renderFavorites();
+        });
+      });
+
+      updateHeaderBadge();
+    }
+
+    function updateSearchState() {
+      const hasValue = favoritesSearch.value.trim().length > 0;
+      clearSearchBtn.classList.toggle('hidden', !hasValue);
+      renderFavorites();
+    }
+
+    favoritesSearch.addEventListener('input', updateSearchState);
+    clearSearchBtn.addEventListener('click', () => {
+      favoritesSearch.value = '';
+      updateSearchState();
+    });
+    document.getElementById('clearResultsBtn').addEventListener('click', () => {
+      favoritesSearch.value = '';
+      updateSearchState();
+    });
+
+    favoritesHeaderButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      window.location.href = 'favourite.html';
+    });
+
+    profileButton.addEventListener('click', openProfileOverlay);
+    mobileProfileButton.addEventListener('click', openProfileOverlay);
+    closeProfileModal.addEventListener('click', closeProfileOverlay);
+    profileOverlay.addEventListener('click', (event) => {
+      if (event.target === profileOverlay) closeProfileOverlay();
+    });
+
+    primaryAuthAction.addEventListener('click', () => {
+      if (!isRegistered) {
+        isRegistered = true;
+        openProfileOverlay();
+      } else {
+        closeProfileOverlay();
+      }
+    });
+
+    secondaryAuthAction.addEventListener('click', () => {
+      if (!isRegistered) {
+        isRegistered = true;
+      }
+      closeProfileOverlay();
+    });
+
+    window.addEventListener('storage', () => renderFavorites());
+    renderFavorites();
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>

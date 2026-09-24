@@ -171,10 +171,10 @@
                     <a class="relative py-space-sm font-label-lg text-label-lg text-on-surface-variant hover:text-primary transition-colors after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all hover:after:w-full" data-path="products" href="product-details.html">Products</a>
                 </nav>
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <button aria-label="Saved items" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" title="Saved items">
+                    <a aria-label="Saved items" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-                        <span class="absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">2</span>
-                    </button>
+                        <span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count>0</span>
+                    </a>
                     <a aria-label="Shopping Cart" class="relative p-2 text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                         <span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
@@ -190,21 +190,6 @@
 
     <!-- Main Content -->
     <main class="w-full pt-24 pb-space-2xl bg-background">
-        <!-- Toast Notification Container -->
-        <div class="fixed top-24 right-8 z-50 flex items-center gap-space-sm bg-inverse-surface text-inverse-on-surface px-space-lg py-space-md rounded-xl shadow-xl transform translate-y-[-20px] opacity-0 pointer-events-none transition-all duration-300"
-            id="cartToast">
-            <span class="material-symbols-outlined text-primary-fixed-dim text-xl"
-                style="font-variation-settings: 'FILL' 1;">check_circle</span>
-            <div class="flex flex-col">
-                <span class="font-label-md text-label-md font-bold">Added to Spatial Bag</span>
-                <span class="font-body-sm text-body-sm text-surface-dim" id="toastItemName">Piece successfully
-                    reserved</span>
-            </div>
-            <button class="ml-space-md text-surface-dim hover:text-inverse-on-surface" onclick="dismissToast()">
-                <span class="material-symbols-outlined text-base">close</span>
-            </button>
-        </div>
-
         <div class="w-full max-w-[1360px] mx-auto px-margin">
             <!-- Product Detail Content Shell Card -->
             <section class="bg-surface-container-lowest border border-outline-variant/30 rounded-2xl p-space-md md:p-space-xl shadow-sm">
@@ -331,16 +316,16 @@
                             </div>
 
                             <!-- Add to Cart Button -->
-                            <button onclick="handleAddToCart()"
-                                class="flex-1 bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md py-3 px-space-lg rounded-lg shadow-sm font-semibold flex items-center justify-center gap-space-xs transition-all active:scale-98">
-                                <span class="material-symbols-outlined text-lg">local_mall</span>
-                                <span>Add to Cart</span>
+                            <button id="mainAddToCartBtn" onclick="handleAddToCart()"
+                                class="flex-1 bg-[#543A23] hover:bg-[#3E2918] text-white font-label-md text-label-md py-3 px-space-lg rounded-lg shadow-sm font-semibold flex items-center justify-center gap-2 transition-all active:scale-98">
+                                <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                <span id="addToCartBtnText">Add to Cart</span>
                             </button>
                         </div>
 
                         <!-- Secondary Action: Continue Shopping -->
                         <div class="pt-space-xs">
-                            <a href="index.html"
+                            <a href="shop.html"
                                 class="w-full border border-outline/60 text-on-surface hover:bg-surface-container-low py-2.5 px-space-lg rounded-lg font-label-md text-label-md font-semibold text-center block transition-all">
                                 Continue Shopping
                             </a>
@@ -360,9 +345,15 @@
 
                 <!-- "You may also like" Related Products Section -->
                 <div class="mt-space-2xl pt-space-lg border-t border-outline-variant/20">
-                    <h2 class="font-headline-md text-headline-md text-on-surface mb-space-md">You may also like</h2>
-                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-gutter" id="relatedProductsGrid">
-                        <!-- Related product cards dynamically rendered -->
+                    <div class="flex items-center justify-between mb-space-md">
+                        <h2 class="font-headline-md text-headline-md text-on-surface">You may also like</h2>
+                        <a href="shop.html" class="flex items-center gap-1.5 text-sm font-semibold text-[#543A23] hover:text-[#F38B00] transition-colors group">
+                            <span>See more</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="relatedProductsGrid">
+                        <!-- 6 Related product cards dynamically rendered across mixed categories -->
                     </div>
                 </div>
             </section>
@@ -807,6 +798,16 @@
         let currentProduct = null;
         let quantity = 1;
 
+        // 6 Related Products across mixed categories
+        const MIXED_RELATED_PRODUCTS = [
+            { id: "arlo-nightstand", title: "Arlo Floating Walnut Nightstand", category: "Nightstands", condition: "Like New", location: "Lekki, Lagos", price: "₦65,000", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB_BgX8tgqlHLa_HV1eNqg860a2fvSkn0z_6-FpGNAIcusrjo0dAvP6JjGGSc0LXbD_KWBMIs1gGJlaCQqQp0jvkbe7v8T3yvS-DehWBFUDE2JTKoEutIVk7M3xmSJblVndH64_TYpkE73Nv7HhYGWaJm4L74Xq_eDTr6oIOmSnzl4iSRRdwWt0oFRMhsj735XbTwllFlNJyNQ3N4kfevAWBX6B3WMNAG0NHAi-irAo5XXYIwVnfnEd" },
+            { id: "vesper-lamp", title: "Vesper Brass Floor Lamp", category: "Lighting", condition: "Pristine", location: "Ikoyi, Lagos", price: "₦82,000", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDI9xV0S2hvURTfgz2aWY2hxfemSeONJRc6aGfbptdwpbaYvRndoGTIwomoZVheXg0GCNTbp2Ww3_u96aV4NEknjaxbo3IOpLVLfo0okkGXGl8Qqa3bwthc3eDqo6cxApks-JIx5vlJMtbPEle1IxMjPCJSXsOZ1Jlh1oeuDqBluBzg-8r4-P2npCLOq2xNT9rqjIW8WVpxn14cGmEmlhApkom8nP65fmE77Lmb3F3LYe8Pxa5Exgq1" },
+            { id: "sahara-rug", title: "Sahara Handwoven Wool Rug", category: "Rugs", condition: "Handcrafted", location: "Victoria Island, Lagos", price: "₦140,000", image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCW5YUYMH9aON7q4jOaGC1uDak-hGYS4JsGbN3GnKe0o_chDMjZPU1Y_gJL74xWGYIHqR7zMJoPMnQ4XUFTpqHYUXAslVNiR8xWagOR0Z79oq2lUnNaK0JR-zGO-WaW5MbUWA40tjrXaJLCz6-iBowQPq_t7lwcUi73pLBT7pUh_nqBUIYO7FbHgljSTb-HUVDzbXH6KDfU7eTbTCD45gDNoTNVG3NmSl5kjBIdv-wHopfXeBe51Ijx" },
+            { id: "nordic-desk", title: "Novo Work Desk", category: "Desks", condition: "Popular Compact", location: "Ikeja, Lagos", price: "₦150,000", image: "assets/featured%20product/novo%20workdesk.jpg" },
+            { id: "cloudrest-mattress", title: "Comfort Cloud Mattress", category: "Mattresses", condition: "Verified Seller", location: "Wuse 2, Abuja", price: "₦180,000", image: "assets/featured%20product/cloud%20bedding.jpg" },
+            { id: "kanso-wardrobe", title: "Aspen Solid Wardrobe", category: "Wardrobes", condition: "3-Door Minimal", location: "Bodija, Ibadan", price: "₦320,000", image: "assets/featured%20product/solid%20wardrobe.jpg" }
+        ];
+
         // Initialize Page
         document.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
@@ -814,7 +815,32 @@
             
             currentProduct = PRODUCTS_DATA[productId] || PRODUCTS_DATA['luna-bed'];
             renderProductDetails(currentProduct);
+            updateInCartButtonState();
         });
+
+        function checkIsInCart(productId, productTitle) {
+            try {
+                const cart = JSON.parse(localStorage.getItem('spacefitCart') || '[]');
+                return cart.some(item => (productId && item.id === productId) || (productTitle && item.title === productTitle));
+            } catch (e) {
+                return false;
+            }
+        }
+
+        function updateInCartButtonState() {
+            const btn = document.getElementById('mainAddToCartBtn');
+            const text = document.getElementById('addToCartBtnText');
+            if (!btn || !text || !currentProduct) return;
+
+            const inCart = checkIsInCart(currentProduct.id, currentProduct.title);
+            if (inCart) {
+                text.textContent = 'In cart';
+                btn.classList.add('bg-stone-800');
+            } else {
+                text.textContent = 'Add to Cart';
+                btn.classList.remove('bg-stone-800');
+            }
+        }
 
         function renderProductDetails(product) {
             document.title = `${product.title} - SpaceFit`;
@@ -894,31 +920,41 @@
                 </div>
             `).join('');
 
-            // Related Products Row
+            // 6 Related Products from a mix of categories
             const relatedGridEl = document.getElementById('relatedProductsGrid');
-            relatedGridEl.innerHTML = product.related.map(rel => `
+            const relatedItems = (MIXED_RELATED_PRODUCTS.filter(item => item.id !== product.id).slice(0, 6));
+            
+            relatedGridEl.innerHTML = relatedItems.map(rel => `
                 <article class="product-card group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-xs hover:shadow-md transition-all border border-outline-variant/20">
                     <div class="relative w-full aspect-[4/3] bg-surface-container-low overflow-hidden">
                         <a href="product-details.html?id=${rel.id}">
                             <img src="${rel.image}" alt="${rel.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                         </a>
-                        <button aria-label="Add to wishlist" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-surface-container-lowest/90 hover:bg-surface-container-lowest text-on-surface flex items-center justify-center transition-transform active:scale-90 shadow-xs" onclick="toggleFavorite(this)">
-                            <span class="material-symbols-outlined text-sm">favorite</span>
+                        <div class="absolute top-2 left-2">
+                            <span class="border border-stone-200 bg-white/95 text-stone-700 text-[9px] font-bold px-1.5 py-0.5 rounded-full uppercase tracking-wider">${rel.condition || 'Verified'}</span>
+                        </div>
+                        <button aria-label="Save to favorites" class="favorite-toggle absolute top-2 right-2 w-11 h-11 rounded-full border border-stone-200 bg-white/90 hover:bg-white text-stone-700 flex items-center justify-center transition-transform active:scale-90 shadow-sm" onclick="toggleFavorite(this)">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
                         </button>
                     </div>
-                    <div class="p-space-xs sm:p-space-sm flex flex-col flex-1 justify-between gap-space-xs">
-                        <a href="product-details.html?id=${rel.id}" class="font-headline-sm text-xs sm:text-[13px] leading-tight font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-1">
-                            ${rel.title}
-                        </a>
-                        <div class="flex items-center justify-between pt-1">
-                            <span class="font-price-md text-xs sm:text-sm font-bold text-on-surface">${rel.price}</span>
-                            <button onclick="triggerAddToCart('${rel.title}')" class="bg-primary hover:bg-primary-container text-on-primary p-1.5 rounded-lg shadow-xs transition-transform active:scale-95 flex items-center justify-center" title="Add to cart">
-                                <span class="material-symbols-outlined text-xs sm:text-sm">add</span>
+                    <div class="p-2 sm:p-2.5 flex flex-col flex-1 justify-between gap-1.5">
+                        <div class="space-y-0.5">
+                            <a href="product-details.html?id=${rel.id}" class="font-headline-sm text-xs sm:text-[13px] leading-tight font-semibold text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+                                ${rel.title}
+                            </a>
+                            <p class="text-[10px] text-stone-500 line-clamp-1">${rel.location || 'Lagos'}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-1 border-t border-stone-100">
+                            <span class="text-xs sm:text-sm font-bold text-[#543A23]">${rel.price}</span>
+                            <button onclick="triggerAddToCart('${rel.title.replace(/'/g, "\\'")}')" class="w-8 h-8 rounded-lg bg-[#543A23] hover:bg-[#F38B00] text-white flex items-center justify-center transition-colors active:scale-95 shadow-sm" title="Add to cart" aria-label="Add to cart">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                             </button>
                         </div>
                     </div>
                 </article>
             `).join('');
+
+            updateInCartButtonState();
         }
 
         // Image Switcher
@@ -930,7 +966,6 @@
                 mainImg.style.opacity = '1';
             }, 150);
 
-            // Update active thumbnail outline
             const thumbnails = document.querySelectorAll('#thumbnailStrip button');
             thumbnails.forEach(t => {
                 t.className = "relative w-16 h-12 sm:w-20 sm:h-14 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 border-outline-variant/30 hover:border-outline";
@@ -958,45 +993,56 @@
 
         // Add to Cart
         function handleAddToCart() {
-            if (currentProduct) {
-                triggerAddToCart(`${currentProduct.title} (x${quantity})`);
+            if (!currentProduct) return;
+
+            const inCart = checkIsInCart(currentProduct.id, currentProduct.title);
+            if (inCart) {
+                // If already in cart, don't duplicate count, but give feedback
+                if (window.SpaceFit && typeof window.SpaceFit.showToast === 'function') {
+                    window.SpaceFit.showToast('Item is already in cart');
+                }
+                updateInCartButtonState();
+                return;
+            }
+
+            const rawPrice = parseInt(String(currentProduct.price).replace(/[^\d]/g, ''), 10) || 0;
+            const itemData = {
+                id: currentProduct.id,
+                title: currentProduct.title,
+                name: currentProduct.title,
+                price: rawPrice,
+                priceFormatted: currentProduct.price,
+                quantity: quantity,
+                image: currentProduct.mainImage,
+                category: currentProduct.category,
+                condition: 'In stock',
+                location: 'Lagos'
+            };
+
+            if (window.SpaceFit && typeof window.SpaceFit.addToCart === 'function') {
+                window.SpaceFit.addToCart(itemData);
+            } else {
+                const cart = JSON.parse(localStorage.getItem('spacefitCart') || '[]');
+                cart.push(itemData);
+                localStorage.setItem('spacefitCart', JSON.stringify(cart));
+            }
+
+            updateInCartButtonState();
+        }
+
+        function triggerAddToCart(productTitle) {
+            if (window.SpaceFit && typeof window.SpaceFit.triggerAddToCart === 'function') {
+                window.SpaceFit.triggerAddToCart(productTitle);
             }
         }
 
-        // Toast Notification Logic
-        function triggerAddToCart(productTitle) {
-            const toast = document.getElementById('cartToast');
-            const toastItemName = document.getElementById('toastItemName');
-            toastItemName.textContent = productTitle + ' added';
-            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-            toast.classList.add('opacity-100', 'translate-y-0');
-
-            clearTimeout(window.toastTimer);
-            window.toastTimer = setTimeout(() => {
-                dismissToast();
-            }, 3500);
-        }
-
-        function dismissToast() {
-            const toast = document.getElementById('cartToast');
-            toast.classList.remove('opacity-100', 'translate-y-0');
-            toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-[-20px]');
-        }
-
-        // Wishlist Favorite Toggle
         function toggleFavorite(btn) {
-            const icon = btn.querySelector('.material-symbols-outlined');
-            const isFilled = icon.style.fontVariationSettings && icon.style.fontVariationSettings.includes("'FILL' 1");
-            if (isFilled) {
-                icon.style.fontVariationSettings = "'FILL' 0";
-                icon.classList.remove('text-primary');
-            } else {
-                icon.style.fontVariationSettings = "'FILL' 1";
-                icon.classList.add('text-primary');
+            if (window.SpaceFit && typeof window.SpaceFit.toggleFavorite === 'function') {
+                window.SpaceFit.toggleFavorite(btn);
             }
         }
     </script>
-    <script src="../script.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
