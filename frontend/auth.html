@@ -1,0 +1,512 @@
+<!DOCTYPE html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Sign In or Create Account — SpaceFit</title>
+
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
+
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="../tailwind/Tailwind.config.js"></script>
+
+<!-- Custom Styles (extracted to styles.css) -->
+<link rel="stylesheet" href="../tailwind/homepage.css">
+
+<style>
+  body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+  /* Custom checkbox treatment matching brand tokens (Tailwind forms plugin base) */
+  .brand-checkbox {
+    accent-color: #315C48;
+  }
+
+  /* Auth form panel swap: no layout shift, no motion beyond a quick fade */
+  .auth-form-panel {
+    display: none;
+  }
+  .auth-form-panel.is-active {
+    display: block;
+    animation: authFadeIn .18s ease-out;
+  }
+  @keyframes authFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Password toggle button should not shrink the input's tap target on mobile */
+  .pw-toggle-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+</style>
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-[#FBF9F5] selection:bg-orange-100 selection:text-amber-900">
+
+<!-- BEGIN: AuthHeader -->
+<header class="w-full border-b border-[#E7E3DC] bg-[#FBF9F5]/95 backdrop-blur-md" data-purpose="auth-header">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center">
+    <a class="flex items-center gap-2.5 focus:outline-none group" href="index.html">
+      <img alt="SpaceFit icon" class="h-9 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="../frontend/assets/icon/SpaceFit_icon.png">
+      <img alt="SpaceFit wordmark" class="h-5 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="../frontend/assets/icon/SpaceFit_wordmark.png">
+    </a>
+  </div>
+</header>
+<!-- END: AuthHeader -->
+
+<main class="flex-1">
+  <section class="auth-page grid lg:grid-cols-2 min-h-[calc(100vh-4rem)]" data-purpose="auth-page">
+
+    <!-- BEGIN: AuthBrandPanel -->
+    <div class="auth-brand-panel hidden lg:flex relative flex-col justify-between bg-[#F5F2EB] border-r border-[#E7E3DC] overflow-hidden p-12">
+      <div class="relative z-10">
+        <p class="text-xs font-semibold uppercase tracking-wider text-[#8C857B] mb-3">SpaceFit Marketplace</p>
+        <h2 class="text-[32px] font-bold leading-tight text-[#1F1E1D] max-w-md">Furniture that fits your space, from people who share it.</h2>
+      </div>
+
+      <div class="relative z-10">
+        <blockquote class="text-sm text-[#373532] leading-relaxed max-w-sm border-l-2 border-[#315C48] pl-4">
+          “I furnished my whole living room through SpaceFit — escrow protection made buying pre-loved pieces feel completely safe.”
+        </blockquote>
+        <p class="mt-3 text-xs font-medium text-[#6F6A63]">Amaka O., Port Harcourt</p>
+      </div>
+
+      <div class="absolute -bottom-16 -right-16 w-72 h-72 rounded-full bg-[#EAF1ED]"></div>
+      <div class="absolute top-1/3 -right-10 w-40 h-40 rounded-full bg-white/60 border border-[#E7E3DC]"></div>
+    </div>
+    <!-- END: AuthBrandPanel -->
+
+    <!-- BEGIN: AuthContent -->
+    <div class="auth-content flex items-center justify-center px-4 py-10 sm:py-14">
+      <div class="auth-card w-full max-w-[400px] sm:bg-white sm:border sm:border-[#E7E3DC] sm:rounded-lg sm:p-8 sm:shadow-[0_1px_3px_rgba(31,30,29,0.06)]">
+
+        <header class="mb-6">
+          <h1 id="authHeading" class="text-[24px] sm:text-[28px] font-bold text-[#1F1E1D] leading-tight">Welcome back</h1>
+          <p id="authSubtext" class="mt-1.5 text-sm text-[#6F6A63]">Sign in to your account to continue.</p>
+        </header>
+
+        <!-- Shared status region for success/general errors -->
+        <div aria-live="polite" class="hidden mb-4 rounded-md border px-3.5 py-3 text-sm" id="authStatus" role="status"></div>
+
+        <div class="auth-form-container">
+
+          <!-- BEGIN: LoginForm -->
+          <form class="auth-form-panel is-active space-y-4" data-purpose="login-form" id="login-form" novalidate="">
+
+            <div>
+              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="login-email">Email address</label>
+              <input aria-describedby="login-email-error" autocomplete="email" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="login-email" name="email" placeholder="you@example.com" type="email">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="login-email-error" role="alert"></p>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-sm font-medium text-[#1F1E1D]" for="login-password">Password</label>
+                <button class="pw-toggle-btn -mr-2 -my-1.5 px-2 text-xs font-semibold text-[#315C48] hover:text-[#244838] focus:outline-none focus:ring-2 focus:ring-[#315C48]/30 rounded" data-target="login-password" data-purpose="toggle-password" type="button">Show</button>
+              </div>
+              <input aria-describedby="login-password-error" autocomplete="current-password" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="login-password" name="password" placeholder="••••••••" type="password">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="login-password-error" role="alert"></p>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <label class="inline-flex items-center gap-2 text-sm text-[#373532]" for="login-remember">
+                <input class="brand-checkbox rounded border-[#D8D4CC] w-4 h-4" id="login-remember" name="remember" type="checkbox">
+                Remember me
+              </label>
+              <a class="text-sm font-medium text-[#315C48] hover:text-[#244838] transition-colors" data-purpose="forgot-password" href="#forgot-password">Forgot password?</a>
+            </div>
+
+            <button class="w-full h-10 rounded-md bg-[#315C48] text-white text-sm font-semibold hover:bg-[#244838] focus:outline-none focus:ring-2 focus:ring-[#315C48]/40 disabled:opacity-60 disabled:cursor-not-allowed transition-colors" data-default-label="Sign In" data-loading-label="Signing in…" id="login-submit" type="submit">
+              Sign In
+            </button>
+
+            <div class="relative py-1">
+              <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-[#E7E3DC]"></div></div>
+              <div class="relative flex justify-center"><span class="bg-white px-3 text-xs text-[#8C857B]">or</span></div>
+            </div>
+
+            <button class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white text-sm font-semibold text-[#1F1E1D] hover:bg-[#F5F2EB] focus:outline-none focus:ring-2 focus:ring-[#315C48]/30 transition-colors" data-purpose="alt-auth" type="button">
+              Continue with Google
+            </button>
+
+            <p class="text-center text-sm text-[#6F6A63] pt-1">
+              Don't have an account?
+              <button class="font-semibold text-[#315C48] hover:text-[#244838] transition-colors" data-purpose="switch-to-signup" type="button">Create account</button>
+            </p>
+          </form>
+          <!-- END: LoginForm -->
+
+          <!-- BEGIN: SignupForm -->
+          <form class="auth-form-panel space-y-4" data-purpose="signup-form" id="signup-form" novalidate="">
+
+            <div>
+              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="signup-name">Full name</label>
+              <input aria-describedby="signup-name-error" autocomplete="name" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-name" name="name" placeholder="Chidinma Okafor" type="text">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-name-error" role="alert"></p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="signup-email">Email address</label>
+              <input aria-describedby="signup-email-error" autocomplete="email" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-email" name="email" placeholder="you@example.com" type="email">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-email-error" role="alert"></p>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-sm font-medium text-[#1F1E1D]" for="signup-password">Password</label>
+                <button class="pw-toggle-btn -mr-2 -my-1.5 px-2 text-xs font-semibold text-[#315C48] hover:text-[#244838] focus:outline-none focus:ring-2 focus:ring-[#315C48]/30 rounded" data-target="signup-password" data-purpose="toggle-password" type="button">Show</button>
+              </div>
+              <input aria-describedby="signup-password-error signup-password-hint" autocomplete="new-password" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-password" name="password" placeholder="At least 8 characters" type="password">
+              <p class="mt-1.5 text-xs text-[#8C857B]" id="signup-password-hint">Use at least 8 characters.</p>
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-password-error" role="alert"></p>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label class="block text-sm font-medium text-[#1F1E1D]" for="signup-confirm-password">Confirm password</label>
+                <button class="pw-toggle-btn -mr-2 -my-1.5 px-2 text-xs font-semibold text-[#315C48] hover:text-[#244838] focus:outline-none focus:ring-2 focus:ring-[#315C48]/30 rounded" data-target="signup-confirm-password" data-purpose="toggle-password" type="button">Show</button>
+              </div>
+              <input aria-describedby="signup-confirm-password-error" autocomplete="new-password" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-confirm-password" name="confirmPassword" placeholder="Re-enter your password" type="password">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-confirm-password-error" role="alert"></p>
+            </div>
+
+            <div>
+              <label class="inline-flex items-start gap-2 text-xs text-[#6F6A63]" for="signup-terms">
+                <input aria-describedby="signup-terms-error" class="brand-checkbox rounded border-[#D8D4CC] w-4 h-4 mt-0.5 shrink-0" id="signup-terms" name="terms" type="checkbox">
+                <span>I agree to the <a class="font-medium text-[#315C48] hover:text-[#244838]" href="#terms">Terms of Service</a> and <a class="font-medium text-[#315C48] hover:text-[#244838]" href="#privacy">Privacy Policy</a>.</span>
+              </label>
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-terms-error" role="alert"></p>
+            </div>
+
+            <button class="w-full h-10 rounded-md bg-[#315C48] text-white text-sm font-semibold hover:bg-[#244838] focus:outline-none focus:ring-2 focus:ring-[#315C48]/40 disabled:opacity-60 disabled:cursor-not-allowed transition-colors" data-default-label="Create Account" data-loading-label="Creating account…" id="signup-submit" type="submit">
+              Create Account
+            </button>
+
+            <p class="text-center text-sm text-[#6F6A63] pt-1">
+              Already have an account?
+              <button class="font-semibold text-[#315C48] hover:text-[#244838] transition-colors" data-purpose="switch-to-login" type="button">Sign in</button>
+            </p>
+          </form>
+          <!-- END: SignupForm -->
+
+        </div>
+      </div>
+    </div>
+    <!-- END: AuthContent -->
+
+  </section>
+</main>
+
+<!-- JavaScript (extracted to script.js on the live site; kept inline here for this page's auth-specific behavior) -->
+<script>
+(function () {
+  'use strict';
+
+  var MIN_PASSWORD_LENGTH = 8;
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  var loginForm = document.getElementById('login-form');
+  var signupForm = document.getElementById('signup-form');
+  var authHeading = document.getElementById('authHeading');
+  var authSubtext = document.getElementById('authSubtext');
+  var authStatus = document.getElementById('authStatus');
+
+  var MODE_COPY = {
+    login: {
+      heading: 'Welcome back',
+      subtext: 'Sign in to your account to continue.'
+    },
+    signup: {
+      heading: 'Create your account',
+      subtext: 'Join SpaceFit to buy and sell furniture with confidence.'
+    }
+  };
+
+  /* ---------- Mode switching ---------- */
+
+  function switchAuthMode(mode) {
+    var toLogin = mode === 'login';
+
+    loginForm.classList.toggle('is-active', toLogin);
+    signupForm.classList.toggle('is-active', !toLogin);
+
+    authHeading.textContent = MODE_COPY[mode].heading;
+    authSubtext.textContent = MODE_COPY[mode].subtext;
+
+    hideStatus();
+    clearAllFieldErrors(loginForm);
+    clearAllFieldErrors(signupForm);
+
+    var firstField = (toLogin ? loginForm : signupForm).querySelector('input');
+    if (firstField) {
+      firstField.focus();
+    }
+  }
+
+  document.querySelectorAll('[data-purpose="switch-to-signup"]').forEach(function (btn) {
+    btn.addEventListener('click', function () { switchAuthMode('signup'); });
+  });
+  document.querySelectorAll('[data-purpose="switch-to-login"]').forEach(function (btn) {
+    btn.addEventListener('click', function () { switchAuthMode('login'); });
+  });
+
+  /* ---------- Password visibility ---------- */
+
+  function togglePasswordVisibility(input, button) {
+    var isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    button.textContent = isHidden ? 'Hide' : 'Show';
+    button.setAttribute('aria-pressed', String(isHidden));
+  }
+
+  document.querySelectorAll('[data-purpose="toggle-password"]').forEach(function (button) {
+    button.setAttribute('aria-pressed', 'false');
+    button.addEventListener('click', function () {
+      var input = document.getElementById(button.getAttribute('data-target'));
+      if (input) togglePasswordVisibility(input, button);
+    });
+  });
+
+  /* ---------- Field error helpers ---------- */
+
+  function showFieldError(field, message) {
+    var errorEl = document.getElementById(field.id + '-error');
+    field.classList.add('border-[#B84A42]', 'focus:border-[#B84A42]', 'focus:ring-[#B84A42]');
+    field.classList.remove('border-[#E7E3DC]');
+    field.setAttribute('aria-invalid', 'true');
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    }
+  }
+
+  function clearFieldError(field) {
+    var errorEl = document.getElementById(field.id + '-error');
+    field.classList.remove('border-[#B84A42]', 'focus:border-[#B84A42]', 'focus:ring-[#B84A42]');
+    field.classList.add('border-[#E7E3DC]');
+    field.removeAttribute('aria-invalid');
+    if (errorEl) {
+      errorEl.textContent = '';
+      errorEl.classList.add('hidden');
+    }
+  }
+
+  function clearAllFieldErrors(form) {
+    form.querySelectorAll('input').forEach(clearFieldError);
+  }
+
+  /* Terms checkbox uses its own small error region, not the input border */
+  function showTermsError(message) {
+    var el = document.getElementById('signup-terms-error');
+    el.textContent = message;
+    el.classList.remove('hidden');
+  }
+  function clearTermsError() {
+    var el = document.getElementById('signup-terms-error');
+    el.textContent = '';
+    el.classList.add('hidden');
+  }
+
+  /* ---------- Status banner ---------- */
+
+  function showStatus(kind, message) {
+    authStatus.textContent = message;
+    authStatus.classList.remove('hidden', 'bg-[#EAF1ED]', 'border-[#315C48]', 'text-[#244838]', 'bg-[#FBEAE8]', 'border-[#B84A42]', 'text-[#B84A42]');
+    if (kind === 'success') {
+      authStatus.classList.add('bg-[#EAF1ED]', 'border-[#315C48]', 'text-[#244838]');
+    } else {
+      authStatus.classList.add('bg-[#FBEAE8]', 'border-[#B84A42]', 'text-[#B84A42]');
+    }
+  }
+
+  function hideStatus() {
+    authStatus.classList.add('hidden');
+    authStatus.textContent = '';
+  }
+
+  /* ---------- Loading state ---------- */
+
+  function setLoadingState(form, isLoading) {
+    var submit = form.querySelector('button[type="submit"]');
+    if (!submit) return;
+    submit.disabled = isLoading;
+    submit.textContent = isLoading
+      ? submit.getAttribute('data-loading-label')
+      : submit.getAttribute('data-default-label');
+  }
+
+  /* ---------- Validation ---------- */
+
+  function validateLoginForm() {
+    var email = document.getElementById('login-email');
+    var password = document.getElementById('login-password');
+    var isValid = true;
+
+    clearFieldError(email);
+    clearFieldError(password);
+
+    if (!email.value.trim()) {
+      showFieldError(email, 'Please enter your email address.');
+      isValid = false;
+    } else if (!EMAIL_RE.test(email.value.trim())) {
+      showFieldError(email, 'Please enter a valid email address.');
+      isValid = false;
+    }
+
+    if (!password.value) {
+      showFieldError(password, 'Please enter your password.');
+      isValid = false;
+    }
+
+    return isValid ? { email: email.value.trim(), password: password.value, remember: document.getElementById('login-remember').checked } : null;
+  }
+
+  function validateSignupForm() {
+    var name = document.getElementById('signup-name');
+    var email = document.getElementById('signup-email');
+    var password = document.getElementById('signup-password');
+    var confirmPassword = document.getElementById('signup-confirm-password');
+    var terms = document.getElementById('signup-terms');
+    var isValid = true;
+
+    clearFieldError(name);
+    clearFieldError(email);
+    clearFieldError(password);
+    clearFieldError(confirmPassword);
+    clearTermsError();
+
+    if (!name.value.trim()) {
+      showFieldError(name, 'Please enter your full name.');
+      isValid = false;
+    }
+
+    if (!email.value.trim()) {
+      showFieldError(email, 'Please enter your email address.');
+      isValid = false;
+    } else if (!EMAIL_RE.test(email.value.trim())) {
+      showFieldError(email, 'Please enter a valid email address.');
+      isValid = false;
+    }
+
+    if (!password.value) {
+      showFieldError(password, 'Please create a password.');
+      isValid = false;
+    } else if (password.value.length < MIN_PASSWORD_LENGTH) {
+      showFieldError(password, 'Password must be at least ' + MIN_PASSWORD_LENGTH + ' characters.');
+      isValid = false;
+    }
+
+    if (!confirmPassword.value) {
+      showFieldError(confirmPassword, 'Please confirm your password.');
+      isValid = false;
+    } else if (password.value && confirmPassword.value !== password.value) {
+      showFieldError(confirmPassword, 'Passwords do not match.');
+      isValid = false;
+    }
+
+    if (!terms.checked) {
+      showTermsError('Please accept the Terms of Service and Privacy Policy to continue.');
+      isValid = false;
+    }
+
+    return isValid
+      ? { name: name.value.trim(), email: email.value.trim(), password: password.value }
+      : null;
+  }
+
+  /* ---------- Auth API stubs ----------
+     Real authentication is not implemented on the frontend. Wire these
+     up to SpaceFit's authentication service when it is available. */
+
+  async function loginUser(credentials) {
+    // Connect the real authentication API here.
+    return new Promise(function (resolve) {
+      setTimeout(function () { resolve({ ok: true }); }, 900);
+    });
+  }
+
+  async function signupUser(userData) {
+    // Connect the real authentication API here.
+    return new Promise(function (resolve) {
+      setTimeout(function () { resolve({ ok: true }); }, 900);
+    });
+  }
+
+  /* ---------- Form submission ---------- */
+
+  loginForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    hideStatus();
+
+    var credentials = validateLoginForm();
+    if (!credentials) {
+      var firstInvalid = loginForm.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+
+    setLoadingState(loginForm, true);
+
+    loginUser(credentials)
+      .then(function (result) {
+        setLoadingState(loginForm, false);
+        if (result && result.ok) {
+          showStatus('success', 'Signed in successfully. Redirecting…');
+        } else {
+          showStatus('error', "We couldn't sign you in with those details. Please check your email and password and try again.");
+        }
+      })
+      .catch(function () {
+        setLoadingState(loginForm, false);
+        showStatus('error', 'Something went wrong on our end. Please try again shortly.');
+      });
+  });
+
+  signupForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    hideStatus();
+
+    var userData = validateSignupForm();
+    if (!userData) {
+      var firstInvalid = signupForm.querySelector('[aria-invalid="true"]');
+      if (firstInvalid) firstInvalid.focus();
+      return;
+    }
+
+    setLoadingState(signupForm, true);
+
+    signupUser(userData)
+      .then(function (result) {
+        setLoadingState(signupForm, false);
+        if (result && result.ok) {
+          showStatus('success', 'Account created. Welcome to SpaceFit!');
+        } else {
+          showStatus('error', "We couldn't create your account. Please try again.");
+        }
+      })
+      .catch(function () {
+        setLoadingState(signupForm, false);
+        showStatus('error', 'Something went wrong on our end. Please try again shortly.');
+      });
+  });
+
+  /* Clear a field's error as soon as the person starts fixing it */
+  document.querySelectorAll('#login-form input, #signup-form input').forEach(function (input) {
+    input.addEventListener('input', function () { clearFieldError(input); });
+  });
+  document.getElementById('signup-terms').addEventListener('change', function () {
+    if (this.checked) clearTermsError();
+  });
+
+  /* Forgot password: placeholder entry point until a reset flow exists */
+  document.querySelector('[data-purpose="forgot-password"]').addEventListener('click', function (event) {
+    event.preventDefault();
+    showStatus('success', "Password reset isn't connected yet — check back soon.");
+  });
+
+})();
+</script>
+</body></html>
