@@ -54,7 +54,7 @@
             <!-- Logo (left) -->
             <a class="flex items-center gap-space-sm shrink-0" data-path="home" href="index.html"><img
                     alt="SpaceFit Brand Logo" class="h-8 w-auto object-contain"
-                    src="logo.jpeg" /><span
+                    src="assets/icon/SpaceFit_icon.png" /><span
                     class="font-headline-md text-headline-md text-primary tracking-tight">SpaceFit</span></a>
             <!-- Nav links + action icons (right) -->
             <div class="flex items-center gap-space-lg">
@@ -1162,6 +1162,86 @@
                         icon.classList.add('text-primary');
                     }
                 }
+
+                function showShopSuccessBar() {
+                    const params = new URLSearchParams(window.location.search);
+                    if (params.get('listing') !== 'success') return;
+
+                    const main = document.querySelector('main');
+                    if (!main) return;
+
+                    const existing = document.getElementById('shopSuccessBar');
+                    if (existing) existing.remove();
+
+                    const successBar = document.createElement('div');
+                    successBar.id = 'shopSuccessBar';
+                    successBar.className = 'w-full border-b border-outline-variant bg-surface-container-lowest';
+                    successBar.innerHTML = `
+                        <div class="max-w-[1360px] mx-auto px-margin py-3 flex items-center justify-between gap-3">
+                            <div class="flex items-center gap-2 text-on-surface">
+                                <span class="material-symbols-outlined text-[18px] text-secondary">check_circle</span>
+                                <span class="font-label-md text-label-md">Your item has been listed on the shop page.</span>
+                            </div>
+                            <button type="button" class="material-symbols-outlined text-[18px] text-on-surface-variant" aria-label="Close success message">close</button>
+                        </div>
+                    `;
+                    main.insertBefore(successBar, main.firstChild);
+                    successBar.querySelector('button').addEventListener('click', () => successBar.remove());
+                }
+
+                function renderPublishedItems() {
+                    const grid = document.getElementById('stateGrid');
+                    if (!grid) return;
+
+                    grid.querySelectorAll('.published-item-card').forEach((card) => card.remove());
+
+                    const publishedItems = JSON.parse(localStorage.getItem('spacefitPublishedItems') || '[]');
+                    if (!publishedItems.length) return;
+
+                    publishedItems.forEach((item) => {
+                        const imageSrc = item.image && !String(item.image).startsWith('blob:') ? item.image : 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80';
+                        const article = document.createElement('article');
+                        article.className = 'published-item-card product-card group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300';
+                        article.innerHTML = `
+                            <div class="relative w-full aspect-[4/3] bg-surface-container-low overflow-hidden">
+                                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${imageSrc}" alt="${item.title}" />
+                                <div class="absolute top-3 left-3">
+                                    <span class="border border-outline-variant bg-surface-container-lowest text-on-surface font-label-sm text-[10px] tracking-wider uppercase font-bold px-2 py-0.5 rounded-full">Just listed</span>
+                                </div>
+                                <button aria-label="Add to wishlist" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-surface-container-lowest/90 hover:bg-surface-container-lowest text-on-surface flex items-center justify-center transition-transform active:scale-90 shadow-sm" onclick="toggleFavorite(this)">
+                                    <span class="material-symbols-outlined text-base">favorite</span>
+                                </button>
+                            </div>
+                            <div class="p-space-md flex flex-col flex-1 justify-between gap-space-sm">
+                                <div class="space-y-1">
+                                    <div class="flex items-center justify-between text-outline font-label-sm text-label-sm">
+                                        <span>${item.condition || 'Good'}</span>
+                                        <div class="flex items-center text-secondary-container">
+                                            <span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="font-bold text-on-surface ml-0.5 text-[11px]">4.8</span>
+                                            <span class="text-outline text-[10px] ml-0.5">(12)</span>
+                                        </div>
+                                    </div>
+                                    <a class="block font-headline-sm text-[15px] leading-tight text-on-surface group-hover:text-primary transition-colors line-clamp-1" href="product-details.html?id=${encodeURIComponent(item.title)}">${item.title}</a>
+                                    <p class="font-body-sm text-[11px] text-on-surface-variant line-clamp-1">${item.location || 'Lagos'} • Ready for collection</p>
+                                </div>
+                                <div class="pt-space-xs flex items-center justify-between">
+                                    <div class="flex flex-col">
+                                        <span class="text-[10px] text-emerald-700 font-label-sm uppercase font-semibold flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> In Stock
+                                        </span>
+                                        <span class="mt-1 font-headline-sm text-headline-sm text-primary">₦${Number(item.price || 0).toLocaleString('en-NG')}</span>
+                                    </div>
+                                    <button class="add-to-cart-btn rounded-lg bg-secondary hover:bg-primary text-on-secondary font-label-md text-label-md px-space-md py-space-sm transition-colors" type="button" onclick="triggerAddToCart('${item.title.replace(/'/g, "\\'")}')">Add to bag</button>
+                                </div>
+                            </div>
+                        `;
+                        grid.insertBefore(article, grid.firstChild);
+                    });
+                }
+
+                showShopSuccessBar();
+                renderPublishedItems();
 
                 const searchInput = document.getElementById('catalogueSearch');
                 if (searchInput) {
