@@ -4,11 +4,14 @@
 
   var CART_STORAGE_KEY = 'spacefitCart';
   var FAVORITES_STORAGE_KEY = 'spacefitSavedItemIds';
-  var AUTH_STORAGE_KEY = 'spacefitIsRegistered';
+  var AUTH_PERSIST_KEY = 'spacefitAuthToken';
+  var AUTH_SESSION_KEY = 'spacefitAuthSession';
+  var USER_PROFILE_KEY = 'spacefitUserProfile';
   var CART_PAGE = 'cart.html';
   var FAVORITES_PAGE = 'favourite.html';
   var SHOP_PAGE = 'shop.html';
   var AUTH_PAGE = 'auth.html';
+  var HOME_CATEGORY_IDS = ['beds', 'wardrobes', 'desks', 'nightstands', 'mattresses', 'rugs'];
 
   /* ==========================================================================
      0. USER AUTHENTICATION STATE & REGISTRATION GUARD
@@ -16,15 +19,59 @@
 
   function isUserRegistered() {
     try {
-      return localStorage.getItem(AUTH_STORAGE_KEY) === 'true';
+      return localStorage.getItem(AUTH_PERSIST_KEY) === 'signed-in' || sessionStorage.getItem(AUTH_SESSION_KEY) === 'signed-in';
     } catch (e) {
       return false;
     }
   }
 
-  function setRegistered(status) {
-    localStorage.setItem(AUTH_STORAGE_KEY, status ? 'true' : 'false');
+  function setRegistered(status, remember) {
+    localStorage.removeItem('spacefitIsRegistered');
+    localStorage.removeItem(AUTH_PERSIST_KEY);
+    sessionStorage.removeItem(AUTH_SESSION_KEY);
+    if (status) {
+      if (remember !== false) localStorage.setItem(AUTH_PERSIST_KEY, 'signed-in');
+      else sessionStorage.setItem(AUTH_SESSION_KEY, 'signed-in');
+    }
     window.dispatchEvent(new CustomEvent('auth:updated', { detail: { isRegistered: !!status } }));
+  }
+
+  function getUserProfile() {
+    try { return JSON.parse(localStorage.getItem(USER_PROFILE_KEY) || '{}') || {}; }
+    catch (e) { return {}; }
+  }
+
+  function saveUserProfile(profile) {
+    var current = getUserProfile();
+    var next = Object.assign({}, current, profile || {});
+    delete next.password;
+    delete next.confirmPassword;
+    localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(next));
+    window.dispatchEvent(new CustomEvent('profile:updated', { detail: next }));
+    return next;
+  }
+
+  function syncProfileIcons() {
+    var signedIn = isUserRegistered();
+    var profile = getUserProfile();
+    document.querySelectorAll('a[aria-label="User profile"], #shopProfileButton').forEach(function (link) {
+      if (!link.dataset.defaultProfileMarkup) link.dataset.defaultProfileMarkup = link.innerHTML;
+      link.href = signedIn ? 'profile.html' : AUTH_PAGE + '?mode=register';
+      link.title = signedIn ? 'Open profile' : 'Register';
+      if (signedIn) {
+        link.classList.add('border', 'border-[#F38B00]', 'rounded-full');
+        if (profile.photo) link.innerHTML = '<img src="' + profile.photo + '" alt="Profile photo" class="h-5 w-5 rounded-full object-cover">';
+        else link.innerHTML = link.dataset.defaultProfileMarkup;
+      } else {
+        link.classList.remove('border', 'border-[#F38B00]');
+        link.innerHTML = link.dataset.defaultProfileMarkup;
+      }
+    });
+  }
+
+  function logout() {
+    setRegistered(false);
+    window.location.href = 'index.html';
   }
 
   function showRegisterModal(returnUrl, pendingAction) {
@@ -83,124 +130,15 @@
     isRegistered: isUserRegistered,
     setRegistered: setRegistered,
     showRegisterModal: showRegisterModal,
-    requireAuth: requireAuth
+    requireAuth: requireAuth,
+    logout: logout,
+    getProfile: getUserProfile,
+    saveProfile: saveUserProfile
   };
+  window.logout = logout;
 
   // Master product catalogue for universal search, recommendations & cart metadata
-  var PRODUCTS_CATALOGUE = [
-    {
-      id: 'luna-bed',
-      title: 'Luna Bed Frame',
-      fullTitle: 'Luna Upholstered Queen Bed',
-      category: 'Beds',
-      price: 450000,
-      priceFormatted: '₦450,000',
-      condition: 'Handcrafted Oak',
-      location: 'Lagos',
-      description: 'Natural solid oak with curved headboard and oatmeal bouclé upholstery.',
-      specs: 'Solid wood frame, 200 × 160 × 90 cm, Modern, Easy assembly',
-      image: 'assets/featured%20product/lunabedframe.jpg',
-      fallbackImage: 'assets/featured%20product/lunabedframe.jpg'
-    },
-    {
-      id: 'cloudrest-mattress',
-      title: 'Comfort Cloud Mattress',
-      fullTitle: 'Comfort Cloud Orthopedic Mattress',
-      category: 'Mattresses',
-      price: 180000,
-      priceFormatted: '₦180,000',
-      condition: 'Verified Seller',
-      location: 'Abuja',
-      description: 'Orthopedic dual-layer high density foam with breathable cooling gel.',
-      specs: 'Memory foam & pocket spring, 180 × 200 × 28 cm, Zero motion transfer',
-      image: 'assets/featured%20product/cloud%20bedding.jpg',
-      fallbackImage: 'assets/featured%20product/cloud%20bedding.jpg'
-    },
-    {
-      id: 'kanso-wardrobe',
-      title: 'Aspen Solid Wardrobe',
-      fullTitle: 'Aspen Solid Minimalist Wardrobe',
-      category: 'Wardrobes',
-      price: 320000,
-      priceFormatted: '₦320,000',
-      condition: '3-Door Minimal',
-      location: 'Ibadan',
-      description: 'Ash wood finish with integrated hangers and soft-close German hinges.',
-      specs: 'Blonde ash wood, 150 × 210 × 60 cm, Modular shelving',
-      image: 'assets/featured%20product/solid%20wardrobe.jpg',
-      fallbackImage: 'assets/featured%20product/solid%20wardrobe.jpg'
-    },
-    {
-      id: 'nordic-desk',
-      title: 'Novo Work Desk',
-      fullTitle: 'Novo Ergonomic Oak Work Desk',
-      category: 'Desks',
-      price: 150000,
-      priceFormatted: '₦150,000',
-      condition: 'Popular Compact',
-      location: 'Lagos',
-      description: 'Slender tapered legs with cable routing for clean, mindful workspaces.',
-      specs: 'Sustainably sourced white oak, 120 × 60 × 75 cm, Beveled perimeter',
-      image: 'assets/featured%20product/novo%20workdesk.jpg',
-      fallbackImage: 'assets/featured%20product/novo%20workdesk.jpg'
-    },
-    {
-      id: 'kyoto-bed',
-      title: 'Kyoto Solid Ash Bed Frame',
-      fullTitle: 'Kyoto Solid Ash Low Platform Bed',
-      category: 'Beds',
-      price: 520000,
-      priceFormatted: '₦520,000',
-      condition: 'Brand new',
-      location: 'Lagos',
-      description: 'Low-profile Japanese solid ash bed frame with mortise and tenon joinery.',
-      specs: 'Solid Japanese Ash, 215 × 195 × 85 cm, Japandi Minimalist',
-      image: 'assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg',
-      fallbackImage: 'assets/carousell/Serene%20living%20room%20with%20sectional%20sofa%20and%20abstract%20art%20coffee%20table%20floor%20lamp.jpg'
-    },
-    {
-      id: 'arlo-nightstand',
-      title: 'Arlo Floating Walnut Nightstand',
-      fullTitle: 'Arlo Floating Walnut Bedside Drawer',
-      category: 'Nightstands',
-      price: 65000,
-      priceFormatted: '₦65,000',
-      condition: 'Like new',
-      location: 'Lagos',
-      description: 'Cantilevered floating American walnut nightstand with cable dock channel.',
-      specs: 'American walnut & brass cleat, 45 × 32 × 25 cm, Wall mounted',
-      image: 'assets/shop%20by%20category/nightstand.jpg',
-      fallbackImage: 'assets/shop%20by%20category/nightstand.jpg'
-    },
-    {
-      id: 'sahara-rug',
-      title: 'Sahara Handwoven Wool Rug',
-      fullTitle: 'Sahara Handwoven Berber Wool Rug',
-      category: 'Rugs',
-      price: 140000,
-      priceFormatted: '₦140,000',
-      condition: 'Brand new',
-      location: 'Abuja',
-      description: 'Handwoven 100% natural mountain wool area rug with subtle Berber motifs.',
-      specs: '100% Unbleached Mountain Wool, 240 × 300 cm, Non-shedding pile',
-      image: 'assets/shop%20by%20category/rugs.jpg',
-      fallbackImage: 'assets/shop%20by%20category/rugs.jpg'
-    },
-    {
-      id: 'vesper-lamp',
-      title: 'Vesper Brass Floor Lamp',
-      fullTitle: 'Vesper Brass Floor Standing Lamp',
-      category: 'Lighting',
-      price: 82000,
-      priceFormatted: '₦82,000',
-      condition: 'Brand new',
-      location: 'Lagos',
-      description: 'Architectural floor lamp crafted from brushed solid brass with travertine base.',
-      specs: 'Brushed brass & travertine stone, 145 × 28 × 28 cm, 2700K warm LED',
-      image: 'assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg',
-      fallbackImage: 'assets/carousell/Scandinavian-style%20home%20office%20with%20a%20minimalist%20desk,%20ergonomic%20chair,%20and%20built-in%20shelves.jpg'
-    }
-  ];
+  var PRODUCTS_CATALOGUE = window.SPACEFIT_PRODUCTS || [];
 
   window.SPACEFIT_PRODUCTS = PRODUCTS_CATALOGUE;
 
@@ -403,7 +341,18 @@
   function getSavedItemIds() {
     try {
       var raw = JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY) || '[]');
-      return Array.isArray(raw) ? raw.filter(Boolean).map(String) : [];
+      if (!Array.isArray(raw)) return [];
+      var canonical = new Map();
+      PRODUCTS_CATALOGUE.forEach(function (product) {
+        canonical.set(normalizeItemId(product.id), product.id);
+        canonical.set(normalizeItemId(product.title), product.id);
+        canonical.set(normalizeItemId(product.fullTitle), product.id);
+      });
+      var valid = Array.from(new Set(raw.filter(Boolean).map(function (id) {
+        return canonical.get(normalizeItemId(id));
+      }).filter(Boolean)));
+      if (JSON.stringify(valid) !== JSON.stringify(raw)) localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(valid));
+      return valid;
     } catch (error) {
       return [];
     }
@@ -424,17 +373,25 @@
       .replace(/^-+|-+$/g, '');
   }
 
+  function canonicalProductId(value) {
+    var normalized = normalizeItemId(value);
+    var product = PRODUCTS_CATALOGUE.find(function (item) {
+      return normalizeItemId(item.id) === normalized || normalizeItemId(item.title) === normalized || normalizeItemId(item.fullTitle) === normalized;
+    });
+    return product ? product.id : normalized;
+  }
+
   function getItemId(button) {
     if (!button) return '';
     var directId = button.getAttribute('data-item-id') || button.dataset.itemId || button.getAttribute('data-product-id');
-    if (directId) return normalizeItemId(directId);
+    if (directId) return canonicalProductId(directId);
 
     var productCard = button.closest('article, .product-card, [data-purpose="product-card"]');
     if (productCard) {
       var cardId = productCard.getAttribute('data-item-id') || productCard.dataset.itemId || productCard.getAttribute('data-product-id');
-      if (cardId) return normalizeItemId(cardId);
+      if (cardId) return canonicalProductId(cardId);
       var productLink = productCard.querySelector('a[href*="product-details"]');
-      if (productLink) { var productId = new URL(productLink.href, window.location.href).searchParams.get('id'); if (productId) return normalizeItemId(productId); }
+      if (productLink) { var productId = new URL(productLink.href, window.location.href).searchParams.get('id'); if (productId) return canonicalProductId(productId); }
       var titleEl = productCard.querySelector('h3, h2, .product-title, a[href*="product-details"]') || productCard.querySelector('a');
       var titleText = titleEl ? (titleEl.textContent || '').trim() : '';
       if (titleText) return normalizeItemId(titleText);
@@ -442,17 +399,17 @@
 
     if ((window.location.pathname.split('/').pop() || '') === 'product-details.html') {
       var pageProductId = new URLSearchParams(window.location.search).get('id');
-      if (pageProductId) return normalizeItemId(pageProductId);
+      if (pageProductId) return canonicalProductId(pageProductId);
     }
     var text = (button.closest('article') || button.parentElement || button).textContent || '';
     var fallback = text.replace(/\s+/g, ' ').trim();
-    return fallback ? normalizeItemId(fallback) : '';
+    return fallback ? canonicalProductId(fallback) : '';
   }
 
   function updateFavoritesBadge() {
     var count = getSavedItemIds().length;
     document.querySelectorAll('[data-favorites-count], #favoritesHeaderBadge, #shopWishlistBadge').forEach(function (badge) {
-      badge.textContent = formatBadgeCount(count);
+      badge.textContent = String(count);
       badge.className = 'absolute -top-1 -right-1 w-[18px] h-[18px] min-w-[18px] rounded-full bg-[#F38B00] text-white text-[11px] font-bold flex items-center justify-center shadow-xs leading-none';
       if (count > 0) {
         badge.classList.remove('hidden');
@@ -466,7 +423,7 @@
 
   function syncFavoriteButtons() {
     var saved = new Set(getSavedItemIds());
-    document.querySelectorAll('[data-favorite-toggle], .favorite-toggle, button[aria-label="Add to wishlist"], button[aria-label="Remove from favorites"], button[onclick*="toggleFavorite"]').forEach(function (button) {
+    document.querySelectorAll('[data-favorite-toggle], .favorite-toggle, button[aria-label="Add to wishlist"], button[aria-label="Remove from favorites"], button[aria-label="Save to favorites"], button[onclick*="toggleFavorite"]').forEach(function (button) {
       if (!button) return;
       button.setAttribute('data-favorite-toggle', 'true');
       var itemId = getItemId(button);
@@ -559,6 +516,236 @@
      4. HOME PAGE SMART SEARCH BAR WITH DROPDOWN SUGGESTIONS & CLEAR BUTTON
      ========================================================================== */
 
+  function renderHomeCategories() {
+    var grid = document.getElementById('homeCategoryGrid');
+    if (!grid) return;
+    var availableCategories = window.SPACEFIT_CATEGORIES || [];
+    var categories = HOME_CATEGORY_IDS.map(function (id) {
+      return availableCategories.find(function (category) { return category.id === id; });
+    }).filter(Boolean);
+    grid.innerHTML = categories.map(function (category) {
+      var href = 'shop.html?category=' + encodeURIComponent(category.id);
+      var image = category.image
+        ? '<img loading="lazy" alt="' + category.name + '" class="w-full h-full object-cover" src="' + category.image + '">'
+        : '<span class="text-xs text-stone-500">No items in this category yet</span>';
+      return '<a class="flex flex-col items-center rounded-xl border border-[#E7E3DC] bg-white p-3 text-center" href="' + href + '">' +
+        '<div class="mb-3 flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg bg-stone-100">' + image + '</div>' +
+        '<span class="text-sm font-semibold text-stone-800">' + category.name + '</span>' +
+        '<span class="mt-0.5 text-[11px] text-stone-500">' + (category.count || 0) + ' items</span></a>';
+    }).join('');
+  }
+
+  function renderGeneratedShopProducts() {
+    var grid = document.getElementById('stateGrid');
+    if (!grid) return;
+    var generated = PRODUCTS_CATALOGUE.filter(function (product) { return product.placeholder; });
+    generated.forEach(function (product) {
+      var article = document.createElement('article');
+      article.className = 'product-card group flex flex-col overflow-hidden rounded-xl border border-[#E7E3DC] bg-white';
+      article.dataset.itemId = product.id;
+      article.dataset.productId = product.id;
+      article.innerHTML = '<div class="relative aspect-[4/3] overflow-hidden bg-stone-100">' +
+        '<a href="product-details.html?id=' + encodeURIComponent(product.id) + '"><img loading="lazy" alt="' + product.title + '" src="' + product.image + '" class="h-full w-full object-cover"></a>' +
+        '<button type="button" data-favorite-toggle data-item-id="' + product.id + '" aria-label="Add to wishlist" aria-pressed="false" class="favorite-toggle absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full border border-[#E7E3DC] bg-white text-stone-700"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path></svg></button>' +
+        '</div><div class="flex flex-1 flex-col gap-2 p-3"><div class="text-[11px] text-stone-500">' + product.category + ' · TODO</div>' +
+        '<a class="line-clamp-2 text-sm font-semibold text-stone-900" href="product-details.html?id=' + encodeURIComponent(product.id) + '">' + product.title + '</a>' +
+        '<div class="mt-auto flex items-center justify-between gap-2"><span class="text-xs font-bold">' + product.priceFormatted + '</span><button type="button" aria-label="Add to cart" title="Add to cart" class="flex h-11 w-11 items-center justify-center rounded-lg bg-[#543A23] text-white" onclick="triggerAddToCart(\'' + product.id + '\')"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"></path></svg></button></div></div>';
+      grid.appendChild(article);
+    });
+  }
+
+  function initShopFilters() {
+    var grid = document.getElementById('stateGrid');
+    var filterList = document.getElementById('categoryFilterList');
+    if (!grid || !filterList) return;
+    var categories = window.SPACEFIT_CATEGORIES || [];
+    filterList.innerHTML = categories.map(function (category) {
+      return '<label class="flex cursor-pointer items-center justify-between gap-2 text-sm text-stone-700"><span class="flex items-center gap-2"><input type="checkbox" data-category-filter="' + category.id + '" class="h-4 w-4 rounded accent-[#543A23]"><span>' + category.name + '</span></span><span class="text-xs text-stone-500">' + category.count + '</span></label>';
+    }).join('');
+
+    var search = document.getElementById('catalogueSearch');
+    var applyLabel = document.getElementById('applyFiltersLabel');
+    var emptyState = document.getElementById('stateEmpty');
+    var resetButton = document.getElementById('resetFiltersButton');
+    var emptyReset = emptyState && emptyState.querySelector('button');
+    var sidebar = filterList.closest('aside');
+    var minPriceInput = document.getElementById('minPriceFilter');
+    var maxPriceInput = document.getElementById('maxPriceFilter');
+    var priceMinLabel = document.getElementById('priceAbsoluteMin');
+    var priceMaxLabel = document.getElementById('priceAbsoluteMax');
+    var prices = PRODUCTS_CATALOGUE.map(function (product) { return Number(product.price); }).filter(function (price) { return Number.isFinite(price) && price > 0; });
+    var fullMinPrice = prices.length ? Math.min.apply(Math, prices) : 0;
+    var fullMaxPrice = prices.length ? Math.max.apply(Math, prices) : 0;
+    function formatFilterPrice(value) { return '₦' + Number(value).toLocaleString('en-NG'); }
+    if (minPriceInput && maxPriceInput) {
+      [minPriceInput, maxPriceInput].forEach(function (input) { input.min = String(fullMinPrice); input.max = String(fullMaxPrice); });
+      minPriceInput.value = String(fullMinPrice);
+      maxPriceInput.value = String(fullMaxPrice);
+    }
+    if (priceMinLabel) priceMinLabel.textContent = formatFilterPrice(fullMinPrice);
+    if (priceMaxLabel) priceMaxLabel.textContent = formatFilterPrice(fullMaxPrice);
+
+    function cardProduct(card) {
+      var id = card.dataset.itemId || card.dataset.productId || '';
+      var link = card.querySelector('a[href*="product-details"]');
+      if (!id && link) id = new URL(link.href, window.location.href).searchParams.get('id') || '';
+      var normalizedId = normalizeItemId(id);
+      return PRODUCTS_CATALOGUE.find(function (product) {
+        return normalizeItemId(product.id) === normalizedId || normalizeItemId(product.title) === normalizedId || normalizeItemId(product.fullTitle) === normalizedId;
+      });
+    }
+    function checkedValues(name) {
+      return sidebar ? Array.from(sidebar.querySelectorAll('input[name="' + name + '"]:checked')).map(function (input) { return input.value; }) : [];
+    }
+    function currentPriceRange() {
+      var preset = sidebar && sidebar.querySelector('input[name="price_bracket"]:checked');
+      var min = minPriceInput && minPriceInput.value !== '' ? Number(minPriceInput.value) : fullMinPrice;
+      var max = maxPriceInput && maxPriceInput.value !== '' ? Number(maxPriceInput.value) : fullMaxPrice;
+      if (preset) {
+        if (preset.value === 'under-100000') { min = fullMinPrice; max = Math.min(fullMaxPrice, 99999); }
+        else if (preset.value === '100000-250000') { min = Math.max(fullMinPrice, 100000); max = Math.min(fullMaxPrice, 250000); }
+        else if (preset.value === '250000-500000') { min = Math.max(fullMinPrice, 250000); max = Math.min(fullMaxPrice, 500000); }
+        else if (preset.value === 'above-500000') { min = Math.max(fullMinPrice, 500001); max = fullMaxPrice; }
+      }
+      return { min: min, max: max, active: !!preset || min !== fullMinPrice || max !== fullMaxPrice };
+    }
+    function updatePriceInputsFromPreset(preset) {
+      if (!preset || !minPriceInput || !maxPriceInput) return;
+      var range = currentPriceRange();
+      minPriceInput.value = String(range.min);
+      maxPriceInput.value = String(range.max);
+    }
+    function loadFiltersFromUrl() {
+      var params = new URLSearchParams(window.location.search);
+      var initialCategories = (params.get('category') || '').split(',').filter(Boolean).map(normalizeItemId);
+      filterList.querySelectorAll('[data-category-filter]').forEach(function (input) { input.checked = initialCategories.includes(input.dataset.categoryFilter); });
+      var initialFilters = (params.get('filters') || '').split(',').map(normalizeItemId);
+      if (sidebar) sidebar.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function (input) {
+        if (input.hasAttribute('data-category-filter')) return;
+        input.checked = initialFilters.includes(normalizeItemId(input.value)) || initialFilters.includes(normalizeItemId(input.value.replace(/-/g, ' ')));
+      });
+      var rangeMin = params.get('minPrice');
+      var rangeMax = params.get('maxPrice');
+      if (rangeMin !== null && minPriceInput) minPriceInput.value = rangeMin;
+      if (rangeMax !== null && maxPriceInput) maxPriceInput.value = rangeMax;
+      var preset = sidebar && sidebar.querySelector('input[name="price_bracket"]:checked');
+      if (preset) updatePriceInputsFromPreset(preset);
+      if (search && params.get('search')) search.value = params.get('search');
+    }
+    loadFiltersFromUrl();
+
+    function apply(updateUrl) {
+      var selected = Array.from(filterList.querySelectorAll('[data-category-filter]:checked')).map(function (input) { return input.dataset.categoryFilter; });
+      var spaceFits = checkedValues('spaceFitProportion');
+      var availability = checkedValues('availability');
+      var priceRange = currentPriceRange();
+      var q = search ? search.value.trim().toLowerCase() : '';
+      var hasNonCategoryFilters = priceRange.active || spaceFits.length > 0 || availability.length > 0;
+      var cards = Array.from(grid.querySelectorAll('.product-card'));
+      var count = 0;
+      cards.forEach(function (card) {
+        var product = cardProduct(card);
+        var categoryMatch = !selected.length || (product && selected.includes(normalizeItemId(product.category)));
+        var searchable = product ? [product.title, product.fullTitle, product.category, product.condition, product.location, product.description, product.specs].filter(Boolean).join(' ').toLowerCase() : (card.textContent || '').toLowerCase();
+        var searchMatch = !q || searchable.includes(q) || (card.textContent || '').toLowerCase().includes(q);
+        var price = Number(product && product.price);
+        var priceMatch = !priceRange.active || (Number.isFinite(price) && price >= priceRange.min && price <= priceRange.max);
+        var spaceMatch = !spaceFits.length || (product && spaceFits.includes(product.spaceFitProportion));
+        var available = String(product && product.availability || '').toLowerCase();
+        var availabilityMatch = !availability.length || availability.some(function (value) {
+          if (value === 'in-stock') return /in stock|low stock/.test(available);
+          if (value === 'pre-order') return /pre-order/.test(available);
+          if (value === 'ready-to-assemble') return /ready.to.assemble/.test(available);
+          return available === value;
+        });
+        var visible = categoryMatch && searchMatch && priceMatch && spaceMatch && availabilityMatch;
+        card.classList.toggle('hidden', !visible);
+        if (visible) count += 1;
+      });
+      var priceRadio = sidebar && sidebar.querySelector('input[name="price_bracket"]:checked');
+      var pickedFilterCount = selected.length + (priceRange.active ? 1 : 0) + spaceFits.length + availability.length;
+      if (applyLabel) applyLabel.textContent = 'Apply Filters' + (pickedFilterCount ? ' (' + pickedFilterCount + ')' : '');
+      var summaryText = document.getElementById('resultsSummaryText');
+      if (summaryText) summaryText.textContent = 'Showing ' + count + ' of ' + cards.length + ' items';
+      var categoryOnly = selected.length === 1 && !q && !hasNonCategoryFilters ? categories.find(function (category) { return category.id === selected[0]; }) : null;
+      if (emptyState) {
+        var heading = emptyState.querySelector('h3');
+        var message = emptyState.querySelector('p');
+        if (heading) heading.textContent = categoryOnly && categoryOnly.count === 0 ? 'No items in this category yet' : (q && !selected.length && !hasNonCategoryFilters ? 'No items found' : 'No items match these filters');
+        if (message) message.textContent = categoryOnly && categoryOnly.count === 0 ? 'New products will appear here when they are added.' : 'Try another search or reset your filters to see all products.';
+        emptyState.classList.toggle('hidden', count > 0);
+        emptyState.classList.toggle('flex', count === 0);
+      }
+      grid.classList.toggle('hidden', count === 0);
+      if (updateUrl) {
+        var next = new URL(window.location.href);
+        if (selected.length) next.searchParams.set('category', selected.join(',')); else next.searchParams.delete('category');
+        if (q) next.searchParams.set('search', q); else next.searchParams.delete('search');
+        var activeValues = sidebar ? Array.from(sidebar.querySelectorAll('input[type="checkbox"]:checked:not([data-category-filter]), input[name="price_bracket"]:checked')).map(function (input) { return input.value; }) : [];
+        if (activeValues.length) next.searchParams.set('filters', activeValues.join(',')); else next.searchParams.delete('filters');
+        if (priceRange.active && !priceRadio) { next.searchParams.set('minPrice', String(priceRange.min)); next.searchParams.set('maxPrice', String(priceRange.max)); }
+        else { next.searchParams.delete('minPrice'); next.searchParams.delete('maxPrice'); }
+        history.replaceState({}, '', next);
+      }
+      syncFavoriteButtons();
+    }
+    filterList.addEventListener('change', function () { apply(true); });
+    if (sidebar) {
+      sidebar.addEventListener('change', function (event) {
+        if (event.target.name === 'price_bracket') updatePriceInputsFromPreset(event.target);
+        if (event.target.type === 'checkbox' || event.target.type === 'radio') apply(true);
+      });
+      [minPriceInput, maxPriceInput].forEach(function (input) {
+        if (!input) return;
+        input.addEventListener('input', function () {
+          sidebar.querySelectorAll('input[name="price_bracket"]').forEach(function (radio) { radio.checked = false; });
+          apply(true);
+        });
+      });
+    }
+    if (search) search.addEventListener('input', function () { apply(true); });
+    ['shopNavSearch', 'mobileShopNavSearch'].forEach(function (id) {
+      var navSearch = document.getElementById(id);
+      if (!navSearch) return;
+      navSearch.addEventListener('input', function () {
+        if (search) search.value = navSearch.value;
+        apply(true);
+      });
+      navSearch.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          if (search) search.value = navSearch.value;
+          apply(true);
+        }
+      });
+    });
+    if (search) search.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') { event.preventDefault(); apply(true); document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' }); }
+    });
+    var clear = document.getElementById('clearSearchBtn');
+    if (clear) clear.addEventListener('click', function () { if (search) search.value = ''; apply(true); });
+    function reset() {
+      filterList.querySelectorAll('input').forEach(function (input) { input.checked = false; });
+      var aside = filterList.closest('aside');
+      if (aside) aside.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(function (input) { input.checked = false; });
+      if (minPriceInput) minPriceInput.value = String(fullMinPrice);
+      if (maxPriceInput) maxPriceInput.value = String(fullMaxPrice);
+      if (search) search.value = '';
+      apply(true);
+    }
+    if (resetButton) resetButton.addEventListener('click', reset);
+    var clearAll = document.getElementById('clearAllFiltersBtn');
+    if (clearAll) clearAll.addEventListener('click', reset);
+    if (emptyReset) { emptyReset.id = 'emptyResetFiltersButton'; emptyReset.addEventListener('click', reset); }
+    var applyButton = document.getElementById('applyFiltersButton');
+    if (applyButton) applyButton.addEventListener('click', function () { apply(true); if (window.innerWidth < 1024) filterList.closest('aside').classList.add('hidden'); });
+    window.addEventListener('popstate', function () {
+      loadFiltersFromUrl();
+      apply(false);
+    });
+    apply(false);
+  }
+
   function initHomeSearchBar() {
     var searchInput = document.getElementById('mainHeroSearch');
     var searchBtn = document.getElementById('searchExecuteBtn');
@@ -594,19 +781,7 @@
       searchBoxWrapper.appendChild(dropdown);
     }
 
-    function filterProducts(query) {
-      var q = query.toLowerCase().trim();
-      if (!q) return [];
-      return PRODUCTS_CATALOGUE.filter(function (prod) {
-        var matchTitle = prod.title.toLowerCase().indexOf(q) !== -1 || prod.fullTitle.toLowerCase().indexOf(q) !== -1;
-        var matchCategory = prod.category.toLowerCase().indexOf(q) !== -1;
-        var matchCondition = prod.condition.toLowerCase().indexOf(q) !== -1;
-        var matchLocation = prod.location.toLowerCase().indexOf(q) !== -1;
-        var matchDesc = prod.description.toLowerCase().indexOf(q) !== -1;
-        var matchSpecs = prod.specs.toLowerCase().indexOf(q) !== -1;
-        return matchTitle || matchCategory || matchCondition || matchLocation || matchDesc || matchSpecs;
-      }).slice(0, 6);
-    }
+    function filterProducts(query) { return window.SpaceFitSearch.search(query).slice(0, 6); }
 
     function renderDropdown(matches, query) {
       if (!query.trim()) {
@@ -709,8 +884,13 @@
   document.addEventListener('DOMContentLoaded', function () {
     var page = window.location.pathname.split('/').pop() || 'index.html';
     var params = new URLSearchParams(window.location.search);
+    if (page === 'auth.html' && isUserRegistered()) { window.location.replace('index.html'); return; }
     if (!isUserRegistered() && !['index.html', 'auth.html', ''].includes(page)) { window.location.replace('index.html?registrationRequired=1&returnUrl=' + encodeURIComponent(page + window.location.search)); return; }
     if (!isUserRegistered() && page === 'index.html' && params.get('registrationRequired') === '1') showRegisterModal(params.get('returnUrl') || null);
+    renderHomeCategories();
+    renderGeneratedShopProducts();
+    initShopFilters();
+    syncProfileIcons();
     document.addEventListener('click', function (event) {
       if (isUserRegistered()) return;
       var link = event.target.closest('a[href]');
@@ -778,9 +958,10 @@
     });
 
     // 6. Universal binding for favorite buttons
-    document.querySelectorAll('[data-favorite-toggle], button[aria-label="Add to wishlist"], button[aria-label="Remove from favorites"]').forEach(function (button) {
+    document.querySelectorAll('[data-favorite-toggle], button[aria-label="Add to wishlist"], button[aria-label="Remove from favorites"], button[aria-label="Save to favorites"]').forEach(function (button) {
       if (button.dataset.boundFav) return;
       button.dataset.boundFav = 'true';
+      if (/toggleFavorite(?:FromCart)?\s*\(/.test(button.getAttribute('onclick') || '')) return;
       button.addEventListener('click', function (e) {
         e.preventDefault();
         var itemId = getItemId(button);
@@ -861,8 +1042,22 @@
       updateFavoritesBadge();
       syncFavoriteButtons();
     }
+    if (e.key === AUTH_PERSIST_KEY || e.key === USER_PROFILE_KEY) syncProfileIcons();
   });
+
+  window.addEventListener('auth:updated', syncProfileIcons);
+  window.addEventListener('profile:updated', syncProfileIcons);
 
   window.addEventListener('cart:updated', syncCartBadges);
   window.addEventListener('favorites:updated', function () { updateFavoritesBadge(); syncFavoriteButtons(); });
+  window.SpaceFitSearch = {
+    search: function (query) {
+      var q = String(query || '').trim().toLowerCase();
+      if (!q) return [];
+      return PRODUCTS_CATALOGUE.filter(function (product) {
+        return [product.title, product.fullTitle, product.category, product.condition, product.location, product.description, product.specs]
+          .filter(Boolean).join(' ').toLowerCase().includes(q);
+      });
+    }
+  };
 })();

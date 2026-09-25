@@ -60,10 +60,11 @@
       background: radial-gradient(circle at 75% 45%, rgba(245, 237, 222, 0.45) 0%, rgba(251, 249, 245, 0.98) 75%);
     }
   </style>
-<meta content="web_standard" name="shell-type"/></head>
+<meta content="web_standard" name="shell-type"/><style>#livePreviewPanel{scrollbar-width:none}#livePreviewPanel::-webkit-scrollbar{display:none}</style>
+</head>
 <body class="min-h-screen flex flex-col antialiased selection:bg-orange-100 selection:text-amber-900">
 <!-- BEGIN: MainHeader -->
-<header class="sticky top-0 z-40 bg-[#FBF9F5]/95 backdrop-blur-md border-b border-[#E7E3DC]" data-purpose="site-navigation">
+<header class="sticky top-0 z-40 bg-[#FBF9F5]/95 border-b border-[#E7E3DC]" data-purpose="site-navigation">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between gap-4">
 <div class="flex items-center gap-6">
 <a class="flex items-center gap-2.5 focus:outline-none group" href="index.html">
@@ -87,11 +88,11 @@
 <div class="flex items-center space-x-3 sm:space-x-4">
 <a aria-label="Saved items" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-<span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count>0</span>
+<span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count></span>
 </a>
 <a aria-label="Shopping Cart" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-<span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+<span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center"></span>
 </a>
 <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
 <a aria-label="User profile" href="auth.html" class="flex items-center gap-2 p-1.5 text-stone-700 hover:text-stone-950 rounded-full hover:bg-stone-100 transition-colors focus:outline-none" title="Profile">
@@ -423,7 +424,7 @@ Use my current location
 </div>
 </div>
 <!-- ======================= RIGHT COLUMN: COMPACT STICKY LIVE PREVIEW & EARNINGS (~33%) ======================= -->
-<div id="livePreviewPanel" class="hidden lg:block lg:col-span-4 xl:col-span-4 lg:sticky lg:top-20 space-y-4 pr-1">
+<div id="livePreviewPanel" class="hidden lg:block lg:col-span-4 xl:col-span-4 lg:sticky lg:top-20 max-h-[calc(100vh-6rem)] overflow-y-auto overscroll-contain space-y-4 pr-1">
 <!-- Compact Sticky Live Preview Card Container -->
 <div class="bg-surface-container-lowest rounded-xl border border-surface-variant shadow-sm overflow-hidden text-xs">
 <div class="px-3.5 py-2.5 border-b border-surface-variant flex items-center justify-between bg-surface-container-low/50">
@@ -629,34 +630,71 @@ Back to editing
       }
 
       function renderSellerProfileState() {
-        const isRegistered = false;
-        if (isRegistered && sellerProfileState) {
-          sellerProfileState.innerHTML = `
-            <div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" alt="Seller profile" class="h-full w-full object-cover" />
-            </div>
-            <div class="min-w-0">
-              <p class="font-label-md text-label-md text-primary font-medium truncate">Seller Name</p>
-              <div class="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <span>Member since Aug 2024</span>
-                <span class="rounded-full border border-outline-variant bg-surface px-1.5 py-0.5 text-[9px] text-primary">Verified seller</span>
-              </div>
-              <div class="flex items-center gap-2 text-[10px] text-on-surface-variant">
-                <span>★ 4.9</span>
-                <span>• 18 sold</span>
-              </div>
-            </div>
-          `;
+        if (!sellerProfileState) return;
+        const auth = window.SpaceFitAuth;
+        let profile = {};
+        try {
+          profile = auth && typeof auth.getProfile === 'function'
+            ? auth.getProfile()
+            : JSON.parse(localStorage.getItem('spacefitUserProfile') || '{}');
+        } catch (error) {}
+        profile = profile || {};
+        const displayName = String(profile.name || profile.fullName || '').trim();
+        const isRegistered = !!(auth && typeof auth.isRegistered === 'function' && auth.isRegistered());
+        const isProfileSetUp = isRegistered && displayName && profile.email && profile.phone && profile.location;
+
+        sellerProfileState.replaceChildren();
+        if (!isProfileSetUp) {
+          const avatar = document.createElement('div');
+          avatar.className = 'w-8 h-8 rounded-full border border-outline-variant bg-surface-container';
+          const note = document.createElement('p');
+          note.className = 'font-label-md text-label-md text-on-surface-variant';
+          note.textContent = 'Seller profile not set up';
+          const detail = document.createElement('div');
+          detail.className = 'min-w-0 flex flex-col justify-center';
+          detail.appendChild(note);
+          sellerProfileState.append(avatar, detail);
+          if (mobilePreviewContent && mobilePreviewOverlay && !mobilePreviewOverlay.classList.contains('hidden')) {
+            mobilePreviewContent.innerHTML = previewCardContent.innerHTML;
+          }
           return;
         }
 
-        if (sellerProfileState) {
-          sellerProfileState.innerHTML = `
-            <div class="w-8 h-8 rounded-full border border-outline-variant bg-surface-container"></div>
-            <div class="min-w-0 flex flex-col justify-center">
-              <p class="font-label-md text-label-md text-on-surface-variant">Seller profile not set up</p>
-            </div>
-          `;
+        const avatar = document.createElement('div');
+        avatar.className = 'w-8 h-8 rounded-full overflow-hidden border border-outline-variant bg-surface-container flex items-center justify-center';
+        if (profile.photo) {
+          const image = document.createElement('img');
+          image.src = profile.photo;
+          image.alt = 'Seller profile';
+          image.className = 'h-full w-full object-cover';
+          avatar.appendChild(image);
+        } else {
+          const icon = document.createElement('span');
+          icon.className = 'material-symbols-outlined text-outline text-[20px]';
+          icon.textContent = 'person';
+          avatar.appendChild(icon);
+        }
+
+        const detail = document.createElement('div');
+        detail.className = 'min-w-0';
+        const name = document.createElement('p');
+        name.className = 'font-label-md text-label-md text-primary font-medium truncate';
+        name.textContent = displayName;
+        detail.appendChild(name);
+
+        const isVerified = profile.verified === true || profile.isVerified === true || profile.sellerVerified === true || String(profile.verificationStatus || '').toLowerCase() === 'verified';
+        if (isVerified) {
+          const status = document.createElement('div');
+          status.className = 'mt-0.5 flex items-center gap-2 text-[10px] text-on-surface-variant';
+          const badge = document.createElement('span');
+          badge.className = 'rounded-full border border-outline-variant bg-surface px-1.5 py-0.5 text-[9px] text-primary';
+          badge.textContent = 'Verified seller';
+          status.appendChild(badge);
+          detail.appendChild(status);
+        }
+        sellerProfileState.append(avatar, detail);
+        if (mobilePreviewContent && mobilePreviewOverlay && !mobilePreviewOverlay.classList.contains('hidden')) {
+          mobilePreviewContent.innerHTML = previewCardContent.innerHTML;
         }
       }
 
@@ -1271,6 +1309,11 @@ Back to editing
       }
 
       syncUploadGrid();
+      window.addEventListener('profile:updated', renderSellerProfileState);
+      window.addEventListener('auth:updated', renderSellerProfileState);
+      window.addEventListener('storage', function (event) {
+        if (!event.key || event.key === 'spacefitUserProfile' || event.key === 'spacefitAuthToken' || event.key === 'spacefitAuthSession') renderSellerProfileState();
+      });
       renderSellerProfileState();
       document.body.dataset.listingPublished = 'false';
       updateMessageSellerState();
@@ -1341,5 +1384,6 @@ Back to editing
       }
     });
   </script>
+<script src="products.js"></script>
 <script src="script.js"></script>
 </body></html>

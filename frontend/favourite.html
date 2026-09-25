@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="products.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -38,12 +39,12 @@
           <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
           </svg>
-          <span id="favoritesHeaderBadge" class="hidden absolute -top-1 -right-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#F38B00] px-1 text-[10px] font-bold text-white">0</span>
+          <span id="favoritesHeaderBadge" class="hidden absolute -top-1 -right-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#F38B00] px-1 text-[10px] font-bold text-white"></span>
         </a>
 
         <a aria-label="Shopping Cart" class="relative flex h-10 w-10 items-center justify-center rounded-full text-stone-600 transition-colors hover:bg-stone-100 hover:text-stone-900" href="cart.html" title="Cart">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-          <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+          <span class="cart-badge hidden absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center"></span>
         </a>
 
         <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
@@ -112,16 +113,16 @@
       <a class="flex flex-col items-center justify-center py-2 text-[#543A23]" href="favourite.html">
         <div class="relative">
           <span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">bookmark</span>
-          <span id="mobileBadge" class="hidden absolute -top-1 -right-2 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#F38B00] px-1 text-[9px] font-bold text-white">0</span>
+          <span id="mobileBadge" class="hidden absolute -top-1 -right-2 flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#F38B00] px-1 text-[9px] font-bold text-white"></span>
         </div>
         <span class="mt-1 text-[10px] font-bold">Favorites</span>
       </a>
-      <button id="mobileProfileButton" type="button" class="flex flex-col items-center justify-center py-2 text-stone-500">
+      <a id="mobileProfileButton" aria-label="User profile" href="auth.html" class="flex flex-col items-center justify-center py-2 text-stone-500">
         <div class="flex h-5 w-5 items-center justify-center rounded-full bg-[#F5F2EB] text-[10px] font-bold text-stone-600">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
         </div>
         <span class="mt-1 text-[10px]">Profile</span>
-      </button>
+      </a>
     </div>
   </div>
 
@@ -155,7 +156,6 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
   <script>
     const STORAGE_KEY = 'spacefitSavedItemIds';
     const DEFAULT_ITEM_LOOKUP = {
@@ -209,18 +209,19 @@
     }
 
     function buildItem(id) {
+      const product = (window.SPACEFIT_PRODUCTS || []).find(item => item.id === id);
+      if (product) return Object.assign({}, product, { specs: product.specs ? [product.specs] : [] });
       const lookup = DEFAULT_ITEM_LOOKUP[id] || {};
       return {
         id,
         title: lookup.title || makeTitleFromId(id),
-        category: lookup.category || 'Home',
-        condition: lookup.condition || 'Good condition',
-        location: lookup.location || 'Lagos',
-        description: lookup.description || 'Saved from the marketplace.',
-        specs: lookup.specs || ['Material: Wood', 'Condition: Good'],
-        price: 120000,
-        originalPrice: 150000,
-        priceDrop: Math.random() > 0.6
+        category: lookup.category || 'TODO category',
+        condition: lookup.condition || 'TODO condition',
+        location: lookup.location || 'TODO location',
+        description: lookup.description || 'Product details to be added.',
+        specs: lookup.specs || [],
+        price: null,
+        priceFormatted: 'Price: TODO'
       };
     }
 
@@ -255,9 +256,9 @@
     function updateHeaderBadge() {
       const count = getSavedIds().length;
       const hasItems = count > 0;
-      favoritesHeaderBadge.textContent = count > 9 ? '9+' : String(count);
+      favoritesHeaderBadge.textContent = String(count);
       favoritesHeaderBadge.classList.toggle('hidden', !hasItems);
-      mobileBadge.textContent = count > 9 ? '9+' : String(count);
+      mobileBadge.textContent = String(count);
       mobileBadge.classList.toggle('hidden', !hasItems);
     }
 
@@ -296,9 +297,9 @@
       favoritesGrid.innerHTML = filtered.map(item => `
         <article class="relative overflow-hidden rounded-2xl border border-[#E7E3DC] bg-white flex flex-col justify-between">
           <div class="relative aspect-[4/3] bg-[#F5F2EB]">
-            ${item.image ? `<img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">` : '<div class="absolute inset-0 bg-stone-200/40"></div>'}
+            ${item.image ? `<img src="${item.image}" alt="${item.title}" loading="lazy" class="w-full h-full object-cover">` : '<div class="absolute inset-0 bg-stone-200/40"></div>'}
             <button type="button" class="remove-favorite absolute right-2 top-2 flex h-11 w-11 items-center justify-center rounded-full border border-[#E7E3DC] bg-white/95 text-[#543A23] shadow-sm transition-transform active:scale-90" data-id="${item.id}" aria-label="Remove ${item.title} from favorites">
-              <svg class="h-5 w-5" fill="currentColor" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35 10.55 20.03C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09A6 6 0 0 1 16.5 3C19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35Z"></path></svg>
             </button>
           </div>
           <div class="space-y-2 p-3.5 flex flex-col flex-1 justify-between">
@@ -311,10 +312,9 @@
               <p class="text-xs text-stone-500">${item.location || 'Lagos'}</p>
             </div>
             <div class="flex items-center justify-between pt-2 border-t border-stone-100">
-              <span class="text-sm sm:text-base font-bold text-[#543A23]">₦${Number(item.price || 0).toLocaleString('en-NG')}</span>
-              <button type="button" onclick="window.SpaceFit ? window.SpaceFit.triggerAddToCart('${item.title.replace(/'/g, "\\'")}') : null" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#543A23] hover:bg-[#F38B00] text-white text-xs font-semibold transition-colors active:scale-95 shadow-sm" title="Add to cart" aria-label="Add to cart">
+              <span class="text-sm sm:text-base font-bold text-[#543A23]">${item.priceFormatted || (item.price ? '₦' + Number(item.price).toLocaleString('en-NG') : 'Price: TODO')}</span>
+              <button type="button" onclick="window.triggerAddToCart && window.triggerAddToCart('${item.title.replace(/'/g, "\\'")}')" class="flex h-11 w-11 items-center justify-center rounded-full bg-[#543A23] text-white transition-colors hover:bg-[#F38B00] active:scale-95 shadow-sm" title="Add to cart" aria-label="Add to cart">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                <span>Add</span>
               </button>
             </div>
           </div>
@@ -365,8 +365,7 @@
       window.location.href = 'favourite.html';
     });
 
-    profileButton.addEventListener('click', openProfileOverlay);
-    mobileProfileButton.addEventListener('click', openProfileOverlay);
+    // Profile links are routed by the shared authentication script.
     closeProfileModal.addEventListener('click', closeProfileOverlay);
     profileOverlay.addEventListener('click', (event) => {
       if (event.target === profileOverlay) closeProfileOverlay();
@@ -391,6 +390,6 @@
     window.addEventListener('storage', () => renderFavorites());
     renderFavorites();
   </script>
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

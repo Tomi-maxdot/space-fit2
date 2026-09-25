@@ -47,7 +47,7 @@
 <body class="min-h-screen flex flex-col antialiased bg-[#FBF9F5] selection:bg-orange-100 selection:text-amber-900">
 
 <!-- BEGIN: AuthHeader -->
-<header class="w-full border-b border-[#E7E3DC] bg-[#FBF9F5]/95 backdrop-blur-md" data-purpose="auth-header">
+<header class="w-full border-b border-[#E7E3DC] bg-[#FBF9F5]/95" data-purpose="auth-header">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center">
     <a class="flex items-center gap-2.5 focus:outline-none group" href="index.html">
       <img alt="SpaceFit icon" class="h-9 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="assets/icon/SpaceFit_icon.png">
@@ -97,8 +97,8 @@
           <form class="auth-form-panel is-active space-y-4" data-purpose="login-form" id="login-form" novalidate="">
 
             <div>
-              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="login-email">Email address</label>
-              <input aria-describedby="login-email-error" autocomplete="email" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="login-email" name="email" placeholder="you@example.com" type="email">
+              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="login-email">Email address or phone number</label>
+              <input aria-describedby="login-email-error" autocomplete="username" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="login-email" name="identifier" placeholder="you@example.com or +234 800 000 0000" type="text">
               <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="login-email-error" role="alert"></p>
             </div>
 
@@ -143,6 +143,18 @@
               <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="signup-email">Email address</label>
               <input aria-describedby="signup-email-error" autocomplete="email" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-email" name="email" placeholder="you@example.com" type="email">
               <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-email-error" role="alert"></p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="signup-phone">Phone number</label>
+              <input aria-describedby="signup-phone-error" autocomplete="tel" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-phone" name="phone" placeholder="+234 800 000 0000" required type="tel">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-phone-error" role="alert"></p>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-[#1F1E1D] mb-1.5" for="signup-location">Location / Neighborhood</label>
+              <input aria-describedby="signup-location-error" autocomplete="address-level2" class="w-full h-10 rounded-md border border-[#E7E3DC] bg-white px-3 text-sm text-[#1F1E1D] placeholder-[#8C857B] focus:outline-none focus:border-[#315C48] focus:ring-1 focus:ring-[#315C48] transition-colors" id="signup-location" name="location" placeholder="e.g. Lekki, Lagos" required type="text">
+              <p class="hidden mt-1.5 text-xs text-[#B84A42]" id="signup-location-error" role="alert"></p>
             </div>
 
             <div>
@@ -243,6 +255,7 @@
   document.querySelectorAll('[data-purpose="switch-to-login"]').forEach(function (btn) {
     btn.addEventListener('click', function () { switchAuthMode('login'); });
   });
+  if (new URLSearchParams(window.location.search).get('mode') === 'register') switchAuthMode('signup');
 
   /* ---------- Password visibility ---------- */
 
@@ -342,8 +355,8 @@
     if (!email.value.trim()) {
       showFieldError(email, 'Please enter your email address.');
       isValid = false;
-    } else if (!EMAIL_RE.test(email.value.trim())) {
-      showFieldError(email, 'Please enter a valid email address.');
+    } else if (!EMAIL_RE.test(email.value.trim()) && email.value.replace(/\D/g, '').length < 7) {
+      showFieldError(email, 'Enter a valid email address or phone number.');
       isValid = false;
     }
 
@@ -352,7 +365,43 @@
       isValid = false;
     }
 
-    return isValid ? { email: email.value.trim(), password: password.value, remember: document.getElementById('login-remember').checked } : null;
+    return isValid ? { identifier: email.value.trim(), password: password.value, remember: document.getElementById('login-remember').checked } : null;
+  }
+
+  function hasRegisteredAccount(identifier) {
+    var profile = window.SpaceFitAuth ? window.SpaceFitAuth.getProfile() : {};
+    var normalized = String(identifier || '').trim().toLowerCase();
+    var phoneDigits = String(identifier || '').replace(/\D/g, '');
+    var accountPhone = String(profile.phone || '').replace(/\D/g, '');
+    return !!((profile.email && String(profile.email).trim().toLowerCase() === normalized) || (phoneDigits.length >= 7 && accountPhone && phoneDigits === accountPhone));
+  }
+
+  function showNoAccountModal(identifier) {
+    var oldModal = document.getElementById('noAccountModal');
+    if (oldModal) oldModal.remove();
+    var overlay = document.createElement('div');
+    overlay.id = 'noAccountModal';
+    overlay.className = 'fixed inset-0 z-[10000] flex items-center justify-center p-4 bg-black/50';
+    overlay.innerHTML = '<section role="dialog" aria-modal="true" aria-labelledby="noAccountTitle" class="w-full max-w-[400px] rounded-xl border border-[#E7E3DC] bg-white p-6 shadow-xl">' +
+      '<h2 id="noAccountTitle" class="text-lg font-bold text-[#1F1E1D]">We couldn\'t find an account with these details. Please register first.</h2>' +
+      '<div class="mt-5 flex flex-col gap-2 sm:flex-row">' +
+      '<button type="button" id="noAccountRegister" class="flex-1 rounded-md bg-[#315C48] px-4 py-2.5 text-sm font-semibold text-white">Register</button>' +
+      '<button type="button" id="noAccountRetry" class="flex-1 rounded-md border border-[#D8D4CC] px-4 py-2.5 text-sm font-semibold text-[#373532]">Try again</button>' +
+      '</div></section>';
+    document.body.appendChild(overlay);
+    overlay.querySelector('#noAccountRegister').addEventListener('click', function () {
+      overlay.remove();
+      switchAuthMode('signup');
+      if (EMAIL_RE.test(identifier)) document.getElementById('signup-email').value = identifier;
+      else document.getElementById('signup-phone').value = identifier;
+    });
+    overlay.querySelector('#noAccountRetry').addEventListener('click', function () {
+      overlay.remove();
+      loginForm.reset();
+      clearAllFieldErrors(loginForm);
+      hideStatus();
+      document.getElementById('login-email').focus();
+    });
   }
 
   function validateSignupForm() {
@@ -360,6 +409,8 @@
     var email = document.getElementById('signup-email');
     var password = document.getElementById('signup-password');
     var confirmPassword = document.getElementById('signup-confirm-password');
+    var phone = document.getElementById('signup-phone');
+    var location = document.getElementById('signup-location');
     var terms = document.getElementById('signup-terms');
     var isValid = true;
 
@@ -367,6 +418,8 @@
     clearFieldError(email);
     clearFieldError(password);
     clearFieldError(confirmPassword);
+    clearFieldError(phone);
+    clearFieldError(location);
     clearTermsError();
 
     if (!name.value.trim()) {
@@ -379,6 +432,16 @@
       isValid = false;
     } else if (!EMAIL_RE.test(email.value.trim())) {
       showFieldError(email, 'Please enter a valid email address.');
+      isValid = false;
+    }
+
+    if (!phone.value.trim()) {
+      showFieldError(phone, 'Please enter your phone number.');
+      isValid = false;
+    }
+
+    if (!location.value.trim()) {
+      showFieldError(location, 'Please enter your location.');
       isValid = false;
     }
 
@@ -404,7 +467,7 @@
     }
 
     return isValid
-      ? { name: name.value.trim(), email: email.value.trim(), password: password.value }
+      ? { name: name.value.trim(), email: email.value.trim(), phone: document.getElementById('signup-phone').value.trim(), location: document.getElementById('signup-location').value.trim(), createdAt: new Date().toISOString(), password: password.value }
       : null;
   }
 
@@ -413,21 +476,27 @@
      up to SpaceFit's authentication service when it is available. */
 
   async function loginUser(credentials) {
-    // Connect the real authentication API here.
+    // TODO: replace mock authentication with the real auth API; never persist credentials.
     return new Promise(function (resolve) {
       setTimeout(function () { resolve({ ok: true }); }, 900);
     });
   }
 
   async function signupUser(userData) {
-    // Connect the real authentication API here.
+    // TODO: replace mock authentication with the real auth API; never persist credentials.
     return new Promise(function (resolve) {
       setTimeout(function () { resolve({ ok: true }); }, 900);
     });
   }
 
-  function completeAuthentication() {
-    if (window.SpaceFitAuth) window.SpaceFitAuth.setRegistered(true);
+  function completeAuthentication(remember, profileData) {
+    if (profileData && window.SpaceFitAuth && typeof window.SpaceFitAuth.saveProfile === 'function') {
+      var priorProfile = window.SpaceFitAuth.getProfile();
+      if (profileData.email && priorProfile.email !== profileData.email) priorProfile = {};
+      window.SpaceFitAuth.saveProfile(Object.assign({}, priorProfile, profileData));
+    }
+
+    if (window.SpaceFitAuth) window.SpaceFitAuth.setRegistered(true, remember);
     var params = new URLSearchParams(window.location.search);
     var pending = params.get('pendingAction') || '';
     var returnUrl = params.get('returnUrl') || 'index.html';
@@ -450,6 +519,11 @@
       return;
     }
 
+    if (!hasRegisteredAccount(credentials.identifier)) {
+      showNoAccountModal(credentials.identifier);
+      return;
+    }
+
     setLoadingState(loginForm, true);
 
     loginUser(credentials)
@@ -457,7 +531,7 @@
         setLoadingState(loginForm, false);
         if (result && result.ok) {
           showStatus('success', 'Signed in successfully. Redirecting…');
-          setTimeout(completeAuthentication, 650);
+          setTimeout(function () { completeAuthentication(credentials.remember); }, 650);
         } else {
           showStatus('error', "We couldn't sign you in with those details. Please check your email and password and try again.");
         }
@@ -486,7 +560,7 @@
         setLoadingState(signupForm, false);
         if (result && result.ok) {
           showStatus('success', 'Account created. Welcome to SpaceFit!');
-          setTimeout(completeAuthentication, 650);
+          setTimeout(function () { completeAuthentication(true, userData); }, 650);
         } else {
           showStatus('error', "We couldn't create your account. Please try again.");
         }
@@ -513,5 +587,6 @@
 
 })();
 </script>
+<script src="products.js"></script>
 <script src="script.js"></script>
 </body></html>

@@ -36,7 +36,7 @@
 </div>
 <!-- END: AnnouncementBar -->
 <!-- BEGIN: MainHeader -->
-<header class="sticky top-0 z-40 bg-[#FBF9F5]/95 backdrop-blur-md border-b border-[#E7E3DC]" data-purpose="site-navigation">
+<header class="sticky top-0 z-40 bg-[#FBF9F5]/95 border-b border-[#E7E3DC]" data-purpose="site-navigation">
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3 flex items-center justify-between gap-4">
 <div class="flex items-center gap-6">
 <a class="flex items-center gap-2.5 focus:outline-none group" href="index.html">
@@ -44,7 +44,7 @@
 <img alt="SpaceFit wordmark" class="h-5 w-auto object-contain transition-transform group-hover:scale-[1.02]" src="assets/icon/SpaceFit_wordmark.png">
 </a>
 <nav class="hidden md:flex items-center space-x-6 text-sm font-medium text-stone-700">
-<a class="hover:text-stone-950 transition-colors" href="index.html">Home</a>
+
 <a class="hover:text-stone-950 transition-colors" href="shop.html">Shop</a>
 <a class="hover:text-stone-950 transition-colors" href="product-details.html">Products</a>
 <a class="text-[#543A23] hover:text-amber-700 transition-colors flex items-center gap-1 font-semibold" href="sell.html">Sell <span class="w-1.5 h-1.5 rounded-full bg-[#F38B00]"></span></a>
@@ -53,11 +53,11 @@
 <div class="flex items-center space-x-3 sm:space-x-4">
 <a aria-label="Saved items" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" data-favorites-icon href="favourite.html" title="Saved items">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path></svg>
-<span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count>0</span>
+<span class="hidden absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#F38B00] text-white text-[10px] font-bold flex items-center justify-center" data-favorites-count></span>
 </a>
 <a aria-label="Shopping Cart" class="relative w-11 h-11 p-0 flex items-center justify-center text-stone-600 hover:text-stone-900 rounded-full hover:bg-stone-100 transition-colors" href="cart.html" title="Cart">
 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-<span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+<span class="cart-badge absolute top-1 right-1 w-4 h-4 bg-[#F38B00] text-white text-[10px] font-bold rounded-full flex items-center justify-center"></span>
 </a>
 <div class="h-5 w-px bg-stone-300/80 mx-1 hidden sm:block"></div>
 <a aria-label="User profile" href="auth.html" class="flex items-center gap-2 p-1.5 text-stone-700 hover:text-stone-950 rounded-full hover:bg-stone-100 transition-colors focus:outline-none">
@@ -69,7 +69,7 @@
 </div>
 </div>
 <div class="hidden md:hidden border-t border-[#E7E3DC] bg-[#FBF9F5] px-4 pt-3 pb-6 space-y-3" id="mobileDrawer">
-<a class="block py-2 text-base font-medium text-stone-800" href="index.html">Home</a>
+
 <a class="block py-2 text-base font-medium text-stone-800" href="shop.html">Shop</a>
 <a class="block py-2 text-base font-medium text-stone-800" href="product-details.html">Products</a>
 <a class="block py-2 text-base font-semibold text-[#F38B00]" href="sell.html">Sell</a>
@@ -261,57 +261,7 @@
           <span class="group-hover:translate-x-0.5 transition-transform">→</span>
 </a>
 </div>
-<!-- Categories Grid matching layout from snapshot -->
-<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4">
-<!-- Category 1: Beds -->
-<a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="shop.html?category=Beds">
-<div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="bed frame" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="assets/shop%20by%20category/bed%20frame.jpg">
-</div>
-<span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Beds</span>
-<span class="text-[11px] text-stone-400 mt-0.5">84 models</span>
-</a>
-<!-- Category 2: Mattresses -->
-<a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="shop.html?category=Mattresses">
-<div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="mattress" class="w-full h-full object-cover object-bottom group-hover:scale-110 transition-transform duration-500" src="assets/shop%20by%20category/mattress.jpg">
-</div>
-<span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Mattresses</span>
-<span class="text-[11px] text-stone-400 mt-0.5">42 models</span>
-</a>
-<!-- Category 3: Wardrobes -->
-<a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="shop.html?category=Wardrobes">
-<div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="wardrobe" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="assets/shop%20by%20category/wardrobe.jpg">
-</div>
-<span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Wardrobes</span>
-<span class="text-[11px] text-stone-400 mt-0.5">56 models</span>
-</a>
-<!-- Category 4: Desks -->
-<a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="shop.html?category=Desks">
-<div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="desk" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="assets/shop%20by%20category/desk.jpg">
-</div>
-<span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Desks</span>
-<span class="text-[11px] text-stone-400 mt-0.5">63 models</span>
-</a>
-<!-- Category 5: Nightstands -->
-<a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="shop.html?category=Nightstands">
-<div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="nightstand" class="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500" src="assets/shop%20by%20category/nightstand.jpg">
-</div>
-<span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Nightstands</span>
-<span class="text-[11px] text-stone-400 mt-0.5">38 models</span>
-</a>
-<!-- Category 6: Rugs -->
-<a class="group flex flex-col items-center bg-white border border-[#E7E3DC] rounded-2xl p-3 hover:shadow-md transition-all hover:-translate-y-0.5" href="shop.html?category=Rugs">
-<div class="w-full aspect-square rounded-xl overflow-hidden bg-stone-100 mb-3">
-<img alt="rugs" class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500" src="assets/shop%20by%20category/rugs.jpg">
-</div>
-<span class="text-xs sm:text-sm font-semibold text-stone-800 group-hover:text-[#543A23]">Rugs</span>
-<span class="text-[11px] text-stone-400 mt-0.5">29 models</span>
-</a>
-</div>
+<div id="homeCategoryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 sm:gap-4"></div>
 </section>
 <!-- END: CategoriesSection -->
 <!-- BEGIN: FeaturedProductsSection -->
@@ -336,7 +286,7 @@
 <a href="product-details.html?id=luna-bed" class="block w-full h-full">
 <img alt="Luna Bed Frame" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="assets/featured%20product/lunabedframe.jpg">
 </a>
-<span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-[10px] font-bold text-stone-700 px-2 py-1 rounded-md uppercase tracking-wider">
+<span class="absolute top-3 left-3 bg-white/90 text-[10px] font-bold text-stone-700 px-2 py-1 rounded-md uppercase tracking-wider">
                   Handcrafted Oak
                 </span>
 <button aria-label="Add to wishlist" class="absolute top-3 right-3 p-1.5 rounded-full bg-white/90 text-stone-600 hover:text-red-500 transition-colors">
@@ -400,7 +350,7 @@
 <a href="product-details.html?id=kanso-wardrobe" class="block w-full h-full">
 <img alt="Aspen Solid Wardrobe" class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500" src="assets/featured%20product/solid%20wardrobe.jpg">
 </a>
-<span class="absolute top-3 left-3 bg-white/90 backdrop-blur-xs text-[10px] font-bold text-stone-700 px-2 py-1 rounded-md uppercase tracking-wider">
+<span class="absolute top-3 left-3 bg-white/90 text-[10px] font-bold text-stone-700 px-2 py-1 rounded-md uppercase tracking-wider">
                   3-Door Minimal
                 </span>
 <button aria-label="Add to wishlist" class="absolute top-3 right-3 p-1.5 rounded-full bg-white/90 text-stone-600 hover:text-red-500 transition-colors">
@@ -561,9 +511,6 @@
 <a class="w-full text-center bg-[#F38B00] hover:bg-[#d97706] text-white font-bold py-3.5 px-6 rounded-xl text-sm transition-colors shadow-md" href="sell.html">
               Start Selling Today
             </a>
-<a class="w-full text-center bg-stone-800 hover:bg-stone-700 text-stone-200 font-semibold py-3 px-6 rounded-xl text-sm transition-colors" href="#how-it-works">
-              How selling works
-            </a>
 </div>
 </div>
 </div>
@@ -674,5 +621,6 @@
 <!-- END: SiteFooter -->
 
 <!-- JavaScript (extracted to script.js) -->
+<script src="products.js"></script>
 <script src="script.js"></script>
 </body></html>
